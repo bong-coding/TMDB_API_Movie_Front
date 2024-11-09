@@ -7,13 +7,13 @@
         @click="setView('table')"
         :class="{ active: currentView === 'table' }"
       >
-        Table View
+        테이블 형태로 보기
       </button>
       <button
         @click="setView('infinite')"
         :class="{ active: currentView === 'infinite' }"
       >
-        Infinite Scroll
+        무한 스크롤
       </button>
     </div>
     <div v-if="currentView === 'table'" class="table-view">
@@ -163,11 +163,13 @@ export default {
 <style scoped>
 .popular {
   padding: 20px;
+  background-color: black;
 }
 .view-toggle {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
+  background-color: black;
 }
 .view-toggle button {
   padding: 10px 20px;
@@ -180,7 +182,7 @@ export default {
 }
 .view-toggle button.active,
 .view-toggle button:hover {
-  background-color: #42b983;
+  background-color: #da70d6;
   color: white;
 }
 .table-view table {
@@ -190,23 +192,29 @@ export default {
 .table-view th,
 .table-view td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 4px;
+  color: white;
+}
+.table-view img {
+  width: 100px; /* 이미지 크기를 줄임 */
+  height: auto;
 }
 .table-view th {
-  background-color: #f2f2f2;
+  background-color: #23242a;
 }
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 20px;
+  color: white;
 }
 .pagination button {
   padding: 10px 20px;
   margin: 0 10px;
   cursor: pointer;
   border: none;
-  background-color: #42b983;
+  background-color: #da70d6;
   color: white;
   border-radius: 4px;
 }
@@ -223,5 +231,6 @@ export default {
   text-align: center;
   margin: 20px 0;
   font-size: 1.2em;
+  color: white;
 }
 </style>
