@@ -4,7 +4,11 @@
     <!-- 인기 영화 섹션 -->
     <section class="movie-section">
       <h2>인기 영화</h2>
-      <div class="movies-container">
+      <div
+        class="movies-container"
+        ref="popularContainer"
+        @wheel.prevent="handleWheel($event, 'popularContainer')"
+      >
         <MovieCard
           v-for="movie in popularMovies"
           :key="movie.id"
@@ -16,7 +20,11 @@
     <!-- 최신 영화 섹션 -->
     <section class="movie-section">
       <h2>최신 영화</h2>
-      <div class="movies-container">
+      <div
+        class="movies-container"
+        ref="nowPlayingContainer"
+        @wheel.prevent="handleWheel($event, 'nowPlayingContainer')"
+      >
         <MovieCard
           v-for="movie in nowPlayingMovies"
           :key="movie.id"
@@ -28,7 +36,11 @@
     <!-- 액션 영화 섹션 -->
     <section class="movie-section">
       <h2>액션 영화</h2>
-      <div class="movies-container">
+      <div
+        class="movies-container"
+        ref="actionContainer"
+        @wheel.prevent="handleWheel($event, 'actionContainer')"
+      >
         <MovieCard
           v-for="movie in actionMovies"
           :key="movie.id"
@@ -56,6 +68,11 @@ export default {
     const loading = ref(false);
     const error = ref(null);
 
+    // 각 컨테이너에 대한 ref 추가
+    const popularContainer = ref(null);
+    const nowPlayingContainer = ref(null);
+    const actionContainer = ref(null);
+
     const fetchMovies = async () => {
       loading.value = true;
       try {
@@ -81,6 +98,20 @@ export default {
       }
     };
 
+    // 마우스 휠 이벤트 핸들러 추가
+    const handleWheel = (event, containerName) => {
+      const containerMap = {
+        popularContainer,
+        nowPlayingContainer,
+        actionContainer,
+      };
+      const container = containerMap[containerName];
+
+      if (container.value) {
+        container.value.scrollLeft += event.deltaY;
+      }
+    };
+
     onMounted(() => {
       fetchMovies();
     });
@@ -91,6 +122,10 @@ export default {
       actionMovies,
       loading,
       error,
+      popularContainer,
+      nowPlayingContainer,
+      actionContainer,
+      handleWheel,
     };
   },
 };
@@ -109,9 +144,14 @@ export default {
   display: flex;
   overflow-x: auto; /* 가로 스크롤 활성화 */
   padding-bottom: 10px;
+  scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
 }
 .movies-container::-webkit-scrollbar {
-  display: none; /* 스크롤바 숨기기 (선택 사항) */
+  height: 8px; /* 스크롤바 높이 설정 */
+}
+.movies-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3); /* 스크롤바 색상 */
+  border-radius: 4px;
 }
 .movie-card {
   flex: 0 0 auto;

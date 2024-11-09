@@ -9,11 +9,9 @@
       <router-link to="/popular">Popular</router-link>
       <router-link to="/search">Search</router-link>
       <router-link to="/wishlist">Wishlist</router-link>
+      <router-link to="/signin" v-if="!isLoggedIn">Sign In</router-link>
+      <button @click="logout" v-else>Logout</button>
     </nav>
-    <div class="auth-section" v-if="isLoggedIn">
-      <span>{{ user.id }}</span>
-      <button @click="logout">Logout</button>
-    </div>
   </header>
 </template>
 
@@ -90,15 +88,7 @@ nav a {
 nav a:hover {
   color: #42b983;
 }
-.auth-section {
-  display: flex;
-  align-items: center;
-}
-.auth-section span {
-  margin-right: 10px;
-  color: #fff;
-}
-.auth-section button {
+nav button {
   padding: 5px 10px;
   cursor: pointer;
   background-color: #ff4d4f;
@@ -107,7 +97,7 @@ nav a:hover {
   color: white;
   transition: background-color 0.3s;
 }
-.auth-section button:hover {
+nav button:hover {
   background-color: #ff7875;
 }
 </style>
