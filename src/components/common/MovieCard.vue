@@ -62,6 +62,7 @@ export default {
   margin: 10px;
   cursor: pointer;
   transition: transform 0.3s;
+  flex: 0 0 auto; /* 가로 스크롤을 위해 추가 */
 }
 .movie-card:hover {
   transform: scale(1.05);
@@ -80,10 +81,11 @@ export default {
 .movie-info h3 {
   margin: 0;
   font-size: 1.1em;
+  color: #fff; /* 텍스트 색상을 흰색으로 설정 */
 }
 .movie-info p {
   font-size: 0.9em;
-  color: #555;
+  color: #ddd; /* 텍스트 색상을 밝은 회색으로 설정 */
 }
 .wishlist-icon {
   position: absolute;
