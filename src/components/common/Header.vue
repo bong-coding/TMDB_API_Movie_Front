@@ -9,7 +9,7 @@
       <router-link to="/popular">Popular</router-link>
       <router-link to="/search">Search</router-link>
       <router-link to="/wishlist">Wishlist</router-link>
-      <router-link to="/signin" v-if="!isLoggedIn">Sign In</router-link>
+      <router-link to="/signin" v-if="!isLoggedIn">logout</router-link>
       <button @click="logout" v-else>Logout</button>
     </nav>
   </header>
