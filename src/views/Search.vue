@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from "vue";
-//import { useFetch } from "../hooks/useFetch";
+import { ref, onMounted, computed, watch } from "vue";
+import { useFetch } from "../hooks/useFetch";
 import MovieCard from "../components/common/MovieCard.vue";
 import api from "../services/api";
 
@@ -56,9 +56,9 @@ export default {
     const genres = ref([]);
     const selectedGenre = ref("");
     const selectedSort = ref("");
+    const params = ref({});
+    const { data, error, loading } = useFetch("/search/movie", params);
     const movies = ref([]);
-    const loading = ref(false);
-    const error = ref(null);
 
     const fetchGenres = async () => {
       try {
@@ -69,22 +69,11 @@ export default {
       }
     };
 
-    const searchMovies = async () => {
+    const searchMovies = () => {
       if (!query.value) return;
-      loading.value = true;
-      error.value = null;
-      try {
-        const response = await api.get("/search/movie", {
-          params: {
-            query: query.value,
-          },
-        });
-        movies.value = response.data.results;
-      } catch (err) {
-        error.value = err;
-      } finally {
-        loading.value = false;
-      }
+      params.value = {
+        query: query.value,
+      };
     };
 
     const resetFilters = () => {
@@ -92,7 +81,14 @@ export default {
       selectedGenre.value = "";
       selectedSort.value = "";
       movies.value = [];
+      params.value = {};
     };
+
+    watch(data, (newData) => {
+      if (newData) {
+        movies.value = newData.results;
+      }
+    });
 
     const filteredMovies = computed(() => {
       let filtered = movies.value;
@@ -103,7 +99,7 @@ export default {
       }
       if (selectedSort.value) {
         const [key, order] = selectedSort.value.split(".");
-        filtered = filtered.sort((a, b) => {
+        filtered = filtered.slice().sort((a, b) => {
           if (a[key] < b[key]) return order === "asc" ? -1 : 1;
           if (a[key] > b[key]) return order === "asc" ? 1 : -1;
           return 0;

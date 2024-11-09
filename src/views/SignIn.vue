@@ -118,19 +118,13 @@ export default {
           this.email,
           this.password,
           (user) => {
-            this.login(user);
-            if (this.rememberMe) {
-              localStorage.setItem("isLoggedIn", true);
-            } else {
-              sessionStorage.setItem("isLoggedIn", true);
-            }
+            this.login({ user, rememberMe: this.rememberMe });
             this.toast.success("Successfully signed in!");
             this.$router.push("/");
           },
           () => {
             this.toast.error("Authentication failed. Please try again.");
-          },
-          this.rememberMe
+          }
         );
       } else {
         // 회원가입 로직

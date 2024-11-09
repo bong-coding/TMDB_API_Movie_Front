@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted, onUnmounted } from "vue";
 import { useFetch } from "../hooks/useFetch";
 import MovieCard from "../components/common/MovieCard.vue";
 import { IMAGE_BASE_URL, POSTER_SIZE } from "../utils/constants";
@@ -62,34 +62,42 @@ export default {
   setup() {
     const currentView = ref("table");
     const page = ref(1);
-    const { data, error, loading } = useFetch("/movie/popular", {
-      page: page.value,
-    });
+    const params = ref({ page: page.value });
+    const { data, error, loading } = useFetch("/movie/popular", params.value);
     const movies = ref([]);
 
-    watch(data, (newData) => {
-      if (newData) {
-        if (currentView.value === "infinite") {
-          movies.value = movies.value.concat(newData.results);
-        } else {
-          movies.value = newData.results;
+    watch(
+      [data, page],
+      ([newData]) => {
+        if (newData) {
+          if (currentView.value === "infinite") {
+            movies.value = movies.value.concat(newData.results);
+          } else {
+            movies.value = newData.results;
+          }
         }
-      }
-    });
+      },
+      { immediate: true }
+    );
 
     const setView = (view) => {
       currentView.value = view;
       if (view === "table") {
         page.value = 1;
+        movies.value = [];
       }
     };
 
     const nextPage = () => {
       page.value += 1;
+      params.value.page = page.value;
     };
 
     const prevPage = () => {
-      if (page.value > 1) page.value -= 1;
+      if (page.value > 1) {
+        page.value -= 1;
+        params.value.page = page.value;
+      }
     };
 
     const getImageUrl = (path) => {
@@ -100,27 +108,33 @@ export default {
 
     const truncateText = (text, maxLength) => {
       if (!text) {
-        return ""; // text가 undefined 또는 null일 경우 빈 문자열 반환
+        return "";
       }
       if (text.length > maxLength) {
         return text.substring(0, maxLength) + "...";
       }
       return text;
     };
-    // Infinite Scroll 구현
-    if (currentView.value === "infinite") {
-      window.addEventListener("scroll", handleScroll);
-    }
 
-    function handleScroll() {
+    const handleScroll = () => {
       if (
         window.innerHeight + window.scrollY >=
           document.body.offsetHeight - 500 &&
         !loading.value
       ) {
-        page.value += 1;
+        nextPage();
       }
-    }
+    };
+
+    onMounted(() => {
+      if (currentView.value === "infinite") {
+        window.addEventListener("scroll", handleScroll);
+      }
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener("scroll", handleScroll);
+    });
 
     watch(currentView, (newView) => {
       if (newView === "infinite") {

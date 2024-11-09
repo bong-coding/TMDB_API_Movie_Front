@@ -1,4 +1,6 @@
 // src/store/modules/movies.js
+import api from "../../services/api";
+
 const state = {
   popularMovies: [],
   loading: false,
@@ -18,14 +20,13 @@ const mutations = {
 };
 
 const actions = {
-  async fetchPopularMovies({ commit }) {
+  async fetchPopularMovies({ commit }, page = 1) {
     commit("SET_LOADING", true);
     try {
-      const response = await fetch(
-        "https://api.themoviedb.org/3/movie/popular?api_key=YOUR_API_KEY&language=ko-KR&page=1"
-      );
-      const data = await response.json();
-      commit("SET_POPULAR_MOVIES", data.results);
+      const response = await api.get("/movie/popular", {
+        params: { page },
+      });
+      commit("SET_POPULAR_MOVIES", response.data.results);
     } catch (error) {
       commit("SET_ERROR", error);
     } finally {

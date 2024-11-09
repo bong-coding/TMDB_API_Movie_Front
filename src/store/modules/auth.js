@@ -1,7 +1,9 @@
 // src/store/modules/auth.js
 const state = {
-  user: null,
-  isLoggedIn: false,
+  user: JSON.parse(localStorage.getItem("user")) || null,
+  isLoggedIn:
+    localStorage.getItem("isLoggedIn") === "true" ||
+    sessionStorage.getItem("isLoggedIn") === "true",
 };
 
 const mutations = {
@@ -16,11 +18,22 @@ const mutations = {
 };
 
 const actions = {
-  login({ commit }, user) {
+  login({ commit }, { user, rememberMe }) {
     commit("SET_USER", user);
+    if (rememberMe) {
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      sessionStorage.setItem("isLoggedIn", "true");
+      sessionStorage.setItem("user", JSON.stringify(user));
+    }
   },
   logout({ commit }) {
     commit("LOGOUT");
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("user");
+    sessionStorage.removeItem("isLoggedIn");
+    sessionStorage.removeItem("user");
   },
 };
 

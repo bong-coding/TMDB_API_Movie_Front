@@ -5,7 +5,7 @@ import api from "../services/api";
 export function useFetch(endpoint, params = {}) {
   const data = ref(null);
   const error = ref(null);
-  const loading = ref(true);
+  const loading = ref(false);
 
   const fetchData = async () => {
     loading.value = true;
@@ -20,6 +20,7 @@ export function useFetch(endpoint, params = {}) {
   };
 
   onMounted(fetchData);
+
   watch(
     () => params,
     () => {

@@ -11,44 +11,59 @@
       <router-link to="/wishlist">Wishlist</router-link>
     </nav>
     <div class="auth-section" v-if="isLoggedIn">
-      <span>{{ user }}</span>
+      <span>{{ user.id }}</span>
       <button @click="logout">Logout</button>
     </div>
   </header>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { onMounted, onUnmounted, ref } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default {
   name: "Header",
-  data() {
-    return {
-      scrolled: false,
+  setup() {
+    const scrolled = ref(false);
+    const store = useStore();
+    const router = useRouter();
+
+    const isLoggedIn = store.getters["auth/isLoggedIn"];
+    const user = store.getters["auth/user"];
+
+    const handleScroll = () => {
+      scrolled.value = window.scrollY > 50;
     };
-  },
-  computed: {
-    ...mapGetters("auth", ["isLoggedIn", "user"]),
-  },
-  methods: {
-    ...mapActions("auth", ["logout"]),
-    navigateHome() {
-      this.$router.push("/");
-    },
-    handleScroll() {
-      this.scrolled = window.scrollY > 50;
-    },
-  },
-  mounted() {
-    window.addEventListener("scroll", this.handleScroll);
-  },
-  beforeUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
+
+    const navigateHome = () => {
+      router.push("/");
+    };
+
+    const logout = () => {
+      store.dispatch("auth/logout");
+      router.push("/signin");
+    };
+
+    onMounted(() => {
+      window.addEventListener("scroll", handleScroll);
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener("scroll", handleScroll);
+    });
+
+    return {
+      scrolled,
+      isLoggedIn,
+      user,
+      navigateHome,
+      logout,
+    };
   },
 };
 </script>
 
-<!-- src/components/common/Header.vue -->
 <style scoped>
 .header {
   display: flex;

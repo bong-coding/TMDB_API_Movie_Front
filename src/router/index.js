@@ -43,14 +43,15 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes,
 });
 
 // 네비게이션 가드: 인증 필요 시 로그인 페이지로 리디렉션
 router.beforeEach((to, from, next) => {
   const isAuthenticated =
-    localStorage.getItem("isLoggedIn") || sessionStorage.getItem("isLoggedIn");
+    localStorage.getItem("isLoggedIn") === "true" ||
+    sessionStorage.getItem("isLoggedIn") === "true";
   if (to.meta.requiresAuth && !isAuthenticated) {
     next("/signin");
   } else {

@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import { useFetch } from "../hooks/useFetch";
 import MovieCard from "../components/common/MovieCard.vue";
 
@@ -21,9 +22,10 @@ export default {
   },
   setup() {
     const { data, error, loading } = useFetch("/movie/popular");
+    const movies = computed(() => data.value?.results || []);
 
     return {
-      movies: data,
+      movies,
       error,
       loading,
     };
