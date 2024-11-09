@@ -90,14 +90,14 @@ export default {
     validateEmail() {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailPattern.test(this.email)) {
-        this.emailError = "Invalid email format.";
+        this.emailError = "이메일 형식이 아닙니다.";
       } else {
         this.emailError = "";
       }
     },
     validatePassword() {
       if (this.password !== this.confirmPassword) {
-        this.passwordError = "Passwords do not match.";
+        this.passwordError = "비밀번호가 일치하지 않습니다.";
       } else {
         this.passwordError = "";
       }
@@ -107,7 +107,7 @@ export default {
         this.validateEmail();
         this.validatePassword();
         if (this.emailError || this.passwordError || !this.terms) {
-          this.toast.error("Please fix the errors before submitting.");
+          this.toast.error("이미 존재하는 아이디입니다.");
           return;
         }
       }
@@ -119,11 +119,11 @@ export default {
           this.password,
           (user) => {
             this.login({ user, rememberMe: this.rememberMe });
-            this.toast.success("Successfully signed in!");
+            this.toast.success("로그인 성공!");
             this.$router.push("/");
           },
           () => {
-            this.toast.error("Authentication failed. Please try again.");
+            this.toast.error("인증 실패 다시 시도");
           }
         );
       } else {
@@ -132,7 +132,7 @@ export default {
           this.email,
           this.password,
           () => {
-            this.toast.success("Successfully registered! Please sign in.");
+            this.toast.success("회원가입을 성공하였습니다. 로그인 해주세요.");
             this.isSignIn = true;
             this.resetForm();
           },
