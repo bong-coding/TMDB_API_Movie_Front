@@ -1,3 +1,4 @@
+// src/store/index.js
 import { createStore } from "vuex";
 import auth from "./modules/auth";
 import movies from "./modules/movies";
