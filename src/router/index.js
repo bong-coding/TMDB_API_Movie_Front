@@ -1,5 +1,5 @@
 // src/router/index.js
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Popular from "../views/Popular.vue";
 import Search from "../views/Search.vue";
@@ -37,13 +37,17 @@ const routes = [
     component: SignIn,
   },
   {
+    path: "/about",
+    redirect: "/signin", // '/about' 경로를 '/signin'으로 리디렉션
+  },
+  {
     path: "/:pathMatch(.*)*",
     redirect: "/",
   },
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 });
 
