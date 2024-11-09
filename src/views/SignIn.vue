@@ -123,7 +123,7 @@ export default {
             this.$router.push("/");
           },
           () => {
-            this.toast.error("인증 실패 다시 시도");
+            this.toast.error("아이디나 비밀번호가 틀렸습니다.");
           }
         );
       } else {
