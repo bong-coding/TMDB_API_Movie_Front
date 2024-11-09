@@ -69,7 +69,7 @@ export default {
   align-items: center;
   padding: 20px;
   transition: background-color 0.5s, opacity 0.5s;
-  background-color: transparent;
+  background-color: black;
 }
 .header.scrolled {
   background-color: rgba(0, 0, 0, 0.8);
