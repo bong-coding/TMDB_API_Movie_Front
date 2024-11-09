@@ -39,7 +39,7 @@ export default {
     });
 
     const truncateText = (text, maxLength) => {
-      if (text.length > maxLength) {
+      if (text && text.length > maxLength) {
         return text.substring(0, maxLength) + "...";
       }
       return text;
@@ -55,7 +55,6 @@ export default {
 };
 </script>
 
-<!-- src/components/common/MovieCard.vue -->
 <style scoped>
 .movie-card {
   position: relative;
