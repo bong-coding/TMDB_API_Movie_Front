@@ -1,6 +1,20 @@
 <!-- src/views/Home.vue -->
 <template>
   <div class="home">
+    <!-- 배너 섹션 -->
+    <section
+      class="banner"
+      :style="{ backgroundImage: `url(${bannerImageUrl})` }"
+    >
+      <div class="banner-overlay"></div>
+      <div class="banner-content">
+        <h1>{{ bannerTitle }}</h1>
+        <p>{{ bannerOverview }}</p>
+        <button @click="playMovie">재생</button>
+        <button @click="viewDetails">상세 정보</button>
+      </div>
+    </section>
+
     <!-- 인기 영화 섹션 -->
     <section class="movie-section">
       <h2>인기 영화</h2>
@@ -68,7 +82,12 @@ export default {
     const loading = ref(false);
     const error = ref(null);
 
-    // 각 컨테이너에 대한 ref 추가
+    // 배너용 데이터
+    const bannerImageUrl = ref("");
+    const bannerTitle = ref("");
+    const bannerOverview = ref("");
+
+    // 각 컨테이너에 대한 ref 정의
     const popularContainer = ref(null);
     const nowPlayingContainer = ref(null);
     const actionContainer = ref(null);
@@ -91,11 +110,26 @@ export default {
           },
         });
         actionMovies.value = actionResponse.data.results;
+
+        // 배너 영화 설정 (인기 영화 중 첫 번째 영화 사용)
+        const bannerMovie = popularMovies.value[0];
+        bannerImageUrl.value = `https://image.tmdb.org/t/p/original${bannerMovie.backdrop_path}`;
+        bannerTitle.value = bannerMovie.title;
+        bannerOverview.value = bannerMovie.overview;
       } catch (err) {
         error.value = err;
       } finally {
         loading.value = false;
       }
+    };
+
+    // 배너 버튼 기능 (구현 필요 시 추가)
+    const playMovie = () => {
+      console.log("재생 버튼 클릭");
+    };
+
+    const viewDetails = () => {
+      console.log("상세 정보 버튼 클릭");
     };
 
     // 마우스 휠 이벤트 핸들러 추가
@@ -122,6 +156,11 @@ export default {
       actionMovies,
       loading,
       error,
+      bannerImageUrl,
+      bannerTitle,
+      bannerOverview,
+      playMovie,
+      viewDetails,
       popularContainer,
       nowPlayingContainer,
       actionContainer,
@@ -133,26 +172,87 @@ export default {
 
 <style scoped>
 .home {
-  background-color: black; /* 메인 페이지 배경색을 검정색으로 설정 */
+  background-color: black;
   color: white;
   padding: 20px;
 }
+
+/* 배너 스타일 */
+.banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 500px;
+  margin-bottom: 40px;
+  background-size: cover;
+  background-position: center;
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 어두운 오버레이 추가 */
+  z-index: 1;
+}
+
+.banner-content {
+  position: relative;
+  color: white;
+  text-align: left;
+  max-width: 600px;
+  z-index: 2;
+}
+
+.banner-content h1 {
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+
+.banner-content p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.banner-content button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+  background-color: #333;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.banner-content button:hover {
+  background-color: #666;
+}
+
+/* 영화 섹션 스타일 */
 .movie-section {
   margin-bottom: 40px;
 }
+
 .movies-container {
   display: flex;
-  overflow-x: auto; /* 가로 스크롤 활성화 */
+  overflow-x: auto;
   padding-bottom: 10px;
-  scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
+  scroll-behavior: smooth;
 }
+
 .movies-container::-webkit-scrollbar {
-  height: 8px; /* 스크롤바 높이 설정 */
+  height: 8px;
 }
+
 .movies-container::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.3); /* 스크롤바 색상 */
+  background-color: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
 }
+
 .movie-card {
   flex: 0 0 auto;
   margin-right: 10px;
