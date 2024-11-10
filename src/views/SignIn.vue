@@ -1,4 +1,3 @@
-<!-- src/views/SignIn.vue -->
 <template>
   <div class="signin-container">
     <transition name="fade">
@@ -6,29 +5,40 @@
         <h2>{{ isSignIn ? "Sign In" : "Sign Up" }}</h2>
         <form @submit.prevent="handleSubmit">
           <div class="input-group">
-            <label for="email">Email:</label>
-            <input
-              type="email"
-              id="email"
-              v-model="email"
-              @blur="validateEmail"
-              required
-            />
+            <label for="email">
+              <input
+                placeholder="Email"
+                type="email"
+                id="email"
+                v-model="email"
+                @blur="validateEmail"
+                required
+              />
+            </label>
             <span v-if="emailError" class="error">{{ emailError }}</span>
           </div>
           <div class="input-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" v-model="password" required />
+            <label for="password">
+              <input
+                placeholder="Password"
+                type="password"
+                id="password"
+                v-model="password"
+                required
+              />
+            </label>
           </div>
           <div v-if="!isSignIn" class="input-group">
-            <label for="confirmPassword">Confirm Password:</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              v-model="confirmPassword"
-              @blur="validatePassword"
-              required
-            />
+            <label for="confirmPassword">
+              Confirm Password:
+              <input
+                type="password"
+                id="confirmPassword"
+                v-model="confirmPassword"
+                @blur="validatePassword"
+                required
+              />
+            </label>
             <span v-if="passwordError" class="error">{{ passwordError }}</span>
           </div>
           <div class="checkbox-group" v-if="!isSignIn">
@@ -196,7 +206,7 @@ export default {
   color: #42b983;
 }
 
-.input-group input {
+.input-group label input {
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
@@ -204,11 +214,13 @@ export default {
   border: 1px solid #45f3ff;
   border-radius: 4px;
   outline: none;
-  color: #fff; /* 텍스트 색상을 흰색으로 설정하여 어두운 배경에서 가독성 향상 */
-  background-color: transparent; /* 배경색을 투명으로 설정 */
+  color: #fff;
+  background-color: transparent;
+  margin-top: 5px; /* label과 input 간 간격 조절 */
 }
-.input-group input:hover,
-.input-group input:focus {
+
+.input-group label input:hover,
+.input-group label input:focus {
   border-color: #45f3ff;
   box-shadow: 0 0 8px rgba(69, 243, 255, 0.3);
 }
