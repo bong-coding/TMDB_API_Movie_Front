@@ -1,7 +1,11 @@
 <template>
   <div class="signin-container">
-    <transition name="fade">
-      <div class="form-container" v-if="showForm">
+    <transition name="fade" mode="out-in">
+      <div
+        class="form-container"
+        v-if="showForm"
+        :key="isSignIn ? 'sign-in' : 'sign-up'"
+      >
         <h2>{{ isSignIn ? "Sign In" : "Sign Up" }}</h2>
         <form @submit.prevent="handleSubmit">
           <div class="input-group">
@@ -150,9 +154,7 @@ export default {
             this.resetForm();
           },
           () => {
-            this.toast.error(
-              "Registration failed. Email may already be in use."
-            );
+            this.toast.error("이미 사용중인 이메일입니다.");
           }
         );
       }
