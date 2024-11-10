@@ -128,6 +128,7 @@ export default {
 
 .filter-header {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 20px;
 }
@@ -135,6 +136,7 @@ export default {
 .title {
   font-size: 1.2em;
   margin: 0;
+  text-align: center;
 }
 
 .filter-bar {
@@ -142,6 +144,7 @@ export default {
   gap: 15px;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .filter {
@@ -177,5 +180,40 @@ export default {
   gap: 20px;
   justify-content: center;
   margin-top: 20px;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .filter-bar {
+    gap: 10px;
+  }
+
+  .filter select,
+  .reset-btn {
+    padding: 8px 15px;
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1em;
+  }
+
+  .filter-header {
+    gap: 10px;
+  }
+
+  .filter-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .filter select,
+  .reset-btn {
+    width: 100%; /* 필터 및 버튼이 화면 너비에 맞도록 설정 */
+    padding: 10px;
+    font-size: 1em;
+  }
 }
 </style>
