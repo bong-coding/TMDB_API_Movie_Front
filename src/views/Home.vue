@@ -1,4 +1,5 @@
 <!-- src/views/Home.vue -->
+<!-- 일단 여기까지 해놨음 commit save-->
 <template>
   <div class="home">
     <!-- 배너 섹션 -->
