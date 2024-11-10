@@ -6,8 +6,9 @@
       <h3>{{ movie.title }}</h3>
       <p>{{ truncateText(movie.overview, 100) }}</p>
     </div>
-    <div class="wishlist-icon">
-      <i :class="isInWishlist ? 'fas fa-heart' : 'far fa-heart'"></i>
+    <!-- 조건부로 따봉 아이콘 표시 -->
+    <div v-if="isInWishlist" class="wishlist-icon">
+      <i class="fas fa-thumbs-up"></i>
     </div>
   </div>
 </template>
@@ -28,6 +29,7 @@ export default {
   setup(props) {
     const { wishlist, toggleWishlist } = useWishlist();
 
+    // 현재 영화가 Wishlist에 있는지 확인하는 computed property
     const isInWishlist = computed(() =>
       wishlist.value.some((item) => item.id === props.movie.id)
     );
@@ -47,7 +49,7 @@ export default {
 
     return {
       toggleWishlist,
-      isInWishlist,
+      isInWishlist, // 따봉 표시 여부
       imageUrl,
       truncateText,
     };
@@ -62,7 +64,6 @@ export default {
   margin: 10px;
   cursor: pointer;
   transition: transform 0.3s;
-  flex: 0 0 auto; /* 가로 스크롤을 위해 추가 */
 }
 .movie-card:hover {
   transform: scale(1.05);
@@ -81,17 +82,17 @@ export default {
 .movie-info h3 {
   margin: 0;
   font-size: 1.1em;
-  color: #fff; /* 텍스트 색상을 흰색으로 설정 */
+  color: #fff;
 }
 .movie-info p {
   font-size: 0.9em;
-  color: #ddd; /* 텍스트 색상을 밝은 회색으로 설정 */
+  color: #ddd;
 }
 .wishlist-icon {
   position: absolute;
   top: 10px;
   right: 10px;
-  color: red;
+  color: #42b983; /* 따봉 아이콘 색상 */
   font-size: 1.5em;
   transition: transform 0.3s;
 }
