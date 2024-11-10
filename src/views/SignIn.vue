@@ -47,11 +47,11 @@
           </div>
           <div class="checkbox-group" v-if="!isSignIn">
             <input type="checkbox" id="terms" v-model="terms" required />
-            <label for="terms">I agree to the terms and conditions</label>
+            <label for="terms">약관 동의</label>
           </div>
           <div class="checkbox-group" v-if="isSignIn">
             <input type="checkbox" id="rememberMe" v-model="rememberMe" />
-            <label for="rememberMe">Remember me</label>
+            <label for="rememberMe">기억하기</label>
           </div>
           <button type="submit">{{ isSignIn ? "Sign In" : "Sign Up" }}</button>
         </form>
