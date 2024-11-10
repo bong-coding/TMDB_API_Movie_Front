@@ -1,9 +1,8 @@
 <!-- src/views/Wishlist.vue -->
 <template>
   <div class="wishlist">
-    <h1>Your Wishlist</h1>
     <div v-if="wishlist.length === 0" class="empty">
-      No movies in your wishlist.
+      위시 리스트가 비어있습니다.
     </div>
     <div v-else class="movies-grid">
       <MovieCard v-for="movie in wishlist" :key="movie.id" :movie="movie" />
@@ -35,11 +34,13 @@ export default {
 <style scoped>
 .wishlist {
   padding: 20px;
+  background-color: #23242a;
 }
 .empty {
   text-align: center;
   font-size: 1.2em;
   margin-top: 50px;
+  color: aliceblue;
 }
 .movies-grid {
   display: flex;
