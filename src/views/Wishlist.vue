@@ -35,16 +35,20 @@ export default {
 .wishlist {
   padding: 20px;
   background-color: #23242a;
+  flex-direction: column;
+  min-height: 100vh;
 }
 .empty {
   text-align: center;
   font-size: 1.2em;
   margin-top: 50px;
   color: aliceblue;
+  flex: 1;
 }
 .movies-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  flex: 1;
 }
 </style>
