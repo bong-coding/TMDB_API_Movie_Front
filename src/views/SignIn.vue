@@ -34,8 +34,8 @@
           </div>
           <div v-if="!isSignIn" class="input-group">
             <label for="confirmPassword">
-              Confirm Password:
               <input
+                placeholder="Confirm Password"
                 type="password"
                 id="confirmPassword"
                 v-model="confirmPassword"
