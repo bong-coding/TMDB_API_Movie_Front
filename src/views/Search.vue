@@ -1,50 +1,60 @@
-<!-- src/views/Search.vue -->
 <template>
-  <div class="search">
-    <h1>Search Movies</h1>
-    <div class="search-bar">
-      <input
-        type="text"
-        v-model="query"
-        placeholder="Search for movies..."
-        @keyup.enter="searchMovies"
-      />
-      <button @click="searchMovies">Search</button>
-      <button @click="resetFilters">Reset Filters</button>
+  <div class="search-page">
+    <div class="filter-header">
+      <h1 class="title">선호하는 설정을 선택하세요</h1>
+      <div class="filter-bar">
+        <div class="filter">
+          <label for="genre">장르 (전체)</label>
+          <select
+            v-model="selectedGenre"
+            id="genre"
+            @change="fetchFilteredMovies"
+          >
+            <option value="">장르 (전체)</option>
+            <option v-for="genre in genres" :key="genre.id" :value="genre.id">
+              {{ genre.name }}
+            </option>
+          </select>
+        </div>
+        <div class="filter">
+          <label for="rating">평점 (전체)</label>
+          <select
+            id="rating"
+            v-model="selectedRating"
+            @change="fetchFilteredMovies"
+          >
+            <option value="">평점 (전체)</option>
+            <option value="7">7 이상</option>
+            <option value="8">8 이상</option>
+            <option value="9">9 이상</option>
+          </select>
+        </div>
+        <div class="filter">
+          <label for="language">언어 (전체)</label>
+          <select
+            id="language"
+            v-model="selectedLanguage"
+            @change="fetchFilteredMovies"
+          >
+            <option value="">언어 (전체)</option>
+            <option value="en">영어</option>
+            <option value="ko">한국어</option>
+            <option value="ja">일본어</option>
+          </select>
+        </div>
+        <button @click="resetFilters" class="reset-btn">초기화</button>
+      </div>
     </div>
-    <div class="filters">
-      <label for="genre">Genre:</label>
-      <select v-model="selectedGenre" id="genre">
-        <option value="">All</option>
-        <option v-for="genre in genres" :key="genre.id" :value="genre.id">
-          {{ genre.name }}
-        </option>
-      </select>
-
-      <label for="sort">Sort By:</label>
-      <select v-model="selectedSort" id="sort">
-        <option value="">Default</option>
-        <option value="popularity.desc">Popularity Descending</option>
-        <option value="release_date.desc">Release Date Descending</option>
-      </select>
-    </div>
-    <div v-if="loading" class="loading">Loading...</div>
-    <div v-else-if="error" class="error">Error loading movies.</div>
-    <div v-else class="movies-grid">
-      <MovieCard
-        v-for="movie in filteredMovies"
-        :key="movie.id"
-        :movie="movie"
-      />
+    <div class="movie-grid">
+      <MovieCard v-for="movie in movies" :key="movie.id" :movie="movie" />
     </div>
   </div>
 </template>
 
 <script>
-import { ref, onMounted, computed, watch } from "vue";
-import { useFetch } from "../hooks/useFetch";
-import MovieCard from "../components/common/MovieCard.vue";
+import { ref, onMounted } from "vue";
 import api from "../services/api";
+import MovieCard from "../components/common/MovieCard.vue";
 
 export default {
   name: "Search",
@@ -52,12 +62,10 @@ export default {
     MovieCard,
   },
   setup() {
-    const query = ref("");
-    const genres = ref([]);
     const selectedGenre = ref("");
-    const selectedSort = ref("");
-    const params = ref({});
-    const { data, error, loading } = useFetch("/search/movie", params);
+    const selectedRating = ref("");
+    const selectedLanguage = ref("");
+    const genres = ref([]);
     const movies = ref([]);
 
     const fetchGenres = async () => {
@@ -65,119 +73,109 @@ export default {
         const response = await api.get("/genre/movie/list");
         genres.value = response.data.genres;
       } catch (err) {
-        error.value = err;
+        console.error(err);
       }
     };
 
-    const searchMovies = () => {
-      if (!query.value) return;
-      params.value = {
-        query: query.value,
+    const fetchFilteredMovies = async () => {
+      const params = {
+        with_genres: selectedGenre.value,
+        "vote_average.gte": selectedRating.value,
+        with_original_language: selectedLanguage.value,
       };
+      try {
+        const response = await api.get("/discover/movie", { params });
+        movies.value = response.data.results;
+      } catch (err) {
+        console.error(err);
+      }
     };
 
     const resetFilters = () => {
-      query.value = "";
       selectedGenre.value = "";
-      selectedSort.value = "";
+      selectedRating.value = "";
+      selectedLanguage.value = "";
       movies.value = [];
-      params.value = {};
     };
-
-    watch(data, (newData) => {
-      if (newData) {
-        movies.value = newData.results;
-      }
-    });
-
-    const filteredMovies = computed(() => {
-      let filtered = movies.value;
-      if (selectedGenre.value) {
-        filtered = filtered.filter((movie) =>
-          movie.genre_ids.includes(parseInt(selectedGenre.value))
-        );
-      }
-      if (selectedSort.value) {
-        const [key, order] = selectedSort.value.split(".");
-        filtered = filtered.slice().sort((a, b) => {
-          if (a[key] < b[key]) return order === "asc" ? -1 : 1;
-          if (a[key] > b[key]) return order === "asc" ? 1 : -1;
-          return 0;
-        });
-      }
-      return filtered;
-    });
 
     onMounted(() => {
       fetchGenres();
     });
 
     return {
-      query,
-      genres,
       selectedGenre,
-      selectedSort,
-      searchMovies,
+      selectedRating,
+      selectedLanguage,
+      genres,
+      movies,
+      fetchFilteredMovies,
       resetFilters,
-      filteredMovies,
-      loading,
-      error,
     };
   },
 };
 </script>
 
 <style scoped>
-.search {
+.search-page {
   padding: 20px;
-}
-.search-bar {
+  background-color: #23242a;
+  color: #fff;
   display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
 }
-.search-bar input {
-  width: 300px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-.search-bar button {
-  padding: 10px 20px;
-  margin-left: 10px;
-  cursor: pointer;
-  border: none;
-  background-color: #42b983;
-  color: white;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-}
-.search-bar button:hover {
-  background-color: #369870;
-}
-.filters {
+
+.filter-header {
   display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.title {
+  font-size: 1.2em;
+  margin: 0;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 15px;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
 }
-.filters label {
-  margin: 0 10px;
+
+.filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
 }
-.filters select {
-  padding: 5px 10px;
-  margin-right: 20px;
+
+.filter select {
+  padding: 10px;
+  border: 1px solid #fff;
+  background-color: #23242a;
+  color: #fff;
   border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
 }
-.loading,
-.error {
-  text-align: center;
-  font-size: 1.2em;
-  margin-top: 50px;
+
+.reset-btn {
+  padding: 10px 25px;
+  border: 1px solid #fff;
+  background-color: #23242a;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
 }
-.movies-grid {
+
+.movie-grid {
   display: flex;
   flex-wrap: wrap;
+  gap: 20px;
   justify-content: center;
+  margin-top: 20px;
 }
 </style>
