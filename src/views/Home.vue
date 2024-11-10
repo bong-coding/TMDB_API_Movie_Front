@@ -10,8 +10,10 @@
       <div class="banner-content">
         <h1>{{ bannerTitle }}</h1>
         <p>{{ bannerOverview }}</p>
-        <button @click="playMovie">재생</button>
-        <button @click="viewDetails">상세 정보</button>
+        <div class="banner-buttons">
+          <button @click="playMovie">재생</button>
+          <button @click="viewDetails">상세 정보</button>
+        </div>
       </div>
     </section>
 
@@ -182,11 +184,11 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
   height: 500px;
   margin-bottom: 40px;
   background-size: cover;
   background-position: center;
+  padding-left: 40px; /* 왼쪽 여백 추가 */
 }
 
 .banner-overlay {
@@ -205,6 +207,9 @@ export default {
   text-align: left;
   max-width: 600px;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .banner-content h1 {
@@ -217,19 +222,24 @@ export default {
   margin-bottom: 20px;
 }
 
-.banner-content button {
-  padding: 10px 20px;
-  margin-right: 10px;
+.banner-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.banner-buttons button {
+  padding: 10px 30px; /* 버튼 크기 조정 */
   cursor: pointer;
-  background-color: #333;
+  background-color: #ffffff;
   border: none;
-  border-radius: 5px;
-  color: white;
+  border-radius: 4px;
+  color: black;
+  font-weight: bold;
   transition: background-color 0.3s;
 }
 
-.banner-content button:hover {
-  background-color: #666;
+.banner-buttons button:hover {
+  background-color: #e6e6e6;
 }
 
 /* 영화 섹션 스타일 */
