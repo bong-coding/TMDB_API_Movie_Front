@@ -129,8 +129,21 @@ export default {
     const fetchMovies = async () => {
       loading.value = true;
       try {
+        // 인기 영화 가져오기
         const popularResponse = await api.get("/movie/popular");
         popularMovies.value = popularResponse.data.results;
+
+        // 최신 영화 가져오기
+        const nowPlayingResponse = await api.get("/movie/now_playing");
+        nowPlayingMovies.value = nowPlayingResponse.data.results;
+
+        // 액션 영화 가져오기
+        const actionResponse = await api.get("/discover/movie", {
+          params: { with_genres: 28 },
+        });
+        actionMovies.value = actionResponse.data.results;
+
+        // 배너 영화 설정 (인기 영화 중 첫 번째 영화 사용)
         const bannerMovie = popularMovies.value[0];
         bannerImageUrl.value = `https://image.tmdb.org/t/p/original${bannerMovie.backdrop_path}`;
         bannerTitle.value = bannerMovie.title;
@@ -150,7 +163,7 @@ export default {
       };
       const container = containerMap[containerName];
       if (container.value) {
-        container.value.scrollLeft += event.deltaY;
+        container.value.scrollLeft += event.deltaY * 3;
       }
     };
 
