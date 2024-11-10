@@ -1,4 +1,3 @@
-<!-- src/views/Popular.vue -->
 <template>
   <div class="popular">
     <h1>Popular Movies</h1>
@@ -20,9 +19,9 @@
       <table>
         <thead>
           <tr>
-            <th>Poster</th>
-            <th>Title</th>
-            <th>Overview</th>
+            <th>영화</th>
+            <th>제목</th>
+            <th>줄거리</th>
           </tr>
         </thead>
         <tbody>
@@ -34,9 +33,9 @@
         </tbody>
       </table>
       <div class="pagination">
-        <button @click="prevPage" :disabled="page === 1">Previous</button>
+        <button @click="prevPage" :disabled="page === 1">이전</button>
         <span>Page {{ page }}</span>
-        <button @click="nextPage">Next</button>
+        <button @click="nextPage">다음</button>
       </div>
     </div>
     <div v-else class="infinite-view">
@@ -169,21 +168,21 @@ export default {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
-  background-color: black;
 }
 .view-toggle button {
   padding: 10px 20px;
   margin: 0 10px;
   cursor: pointer;
   border: none;
-  background-color: #ccc;
+  background-color: #4b4b4b;
+  color: white;
   border-radius: 4px;
   transition: background-color 0.3s;
 }
 .view-toggle button.active,
 .view-toggle button:hover {
-  background-color: #da70d6;
-  color: white;
+  background-color: #e2e2e2;
+  color: black;
 }
 .table-view table {
   width: 100%;
@@ -192,11 +191,11 @@ export default {
 .table-view th,
 .table-view td {
   border: 1px solid #ddd;
-  padding: 4px;
+  padding: 8px;
   color: white;
 }
 .table-view img {
-  width: 100px; /* 이미지 크기를 줄임 */
+  width: 100px;
   height: auto;
 }
 .table-view th {
@@ -214,13 +213,17 @@ export default {
   margin: 0 10px;
   cursor: pointer;
   border: none;
-  background-color: #da70d6;
+  background-color: #4b4b4b;
   color: white;
   border-radius: 4px;
+  transition: background-color 0.3s;
 }
 .pagination button:disabled {
-  background-color: #ccc;
+  background-color: #333;
   cursor: not-allowed;
+}
+.pagination button:hover:not(:disabled) {
+  background-color: #e2e2e2;
 }
 .infinite-view .movies-grid {
   display: flex;
