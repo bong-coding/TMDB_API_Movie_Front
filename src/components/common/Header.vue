@@ -1,4 +1,4 @@
-<!-- src/components/common/Header.vue -->
+// src/components/common/Header.vue
 <template>
   <header :class="['header', { scrolled }]">
     <div class="logo" @click="navigateHome">
@@ -9,14 +9,14 @@
       <router-link to="/popular">대세 콘텐츠</router-link>
       <router-link to="/search">찾아보기</router-link>
       <router-link to="/wishlist">찜 목록</router-link>
-      <router-link to="/signin" v-if="!isLoggedIn">로그인</router-link>
-      <button @click="logout" v-else>로그아웃</button>
+      <router-link v-if="!isLoggedIn" to="/signin">로그인</router-link>
+      <button v-else @click="logout">로그아웃</button>
     </nav>
   </header>
 </template>
 
 <script>
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
@@ -27,8 +27,18 @@ export default {
     const store = useStore();
     const router = useRouter();
 
-    const isLoggedIn = store.getters["auth/isLoggedIn"];
-    const user = store.getters["auth/user"];
+    // 로그인 상태를 localStorage에서 바로 확인
+    const isLoggedIn = ref(localStorage.getItem("isLoggedIn") === "true");
+
+    // 로그인 상태를 watch로 반응형으로 설정
+    watch(
+      () => store.getters["auth/isLoggedIn"],
+      (newVal) => {
+        isLoggedIn.value = newVal;
+        localStorage.setItem("isLoggedIn", newVal); // localStorage에 상태 저장
+      },
+      { immediate: true }
+    );
 
     const handleScroll = () => {
       scrolled.value = window.scrollY > 50;
@@ -40,6 +50,7 @@ export default {
 
     const logout = () => {
       store.dispatch("auth/logout");
+      localStorage.removeItem("isLoggedIn"); // 로그아웃 시 localStorage에서 상태 삭제
       router.push("/signin");
     };
 
@@ -54,7 +65,6 @@ export default {
     return {
       scrolled,
       isLoggedIn,
-      user,
       navigateHome,
       logout,
     };
@@ -63,6 +73,7 @@ export default {
 </script>
 
 <style scoped>
+/* 기존 스타일 유지 */
 .header {
   display: flex;
   justify-content: space-between;
