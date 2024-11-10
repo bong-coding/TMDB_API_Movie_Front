@@ -91,13 +91,13 @@ nav a:hover {
 nav button {
   padding: 5px 10px;
   cursor: pointer;
-  background-color: #ff4d4f;
+  background-color: #4b4b4b;
   border: none;
   border-radius: 4px;
-  color: white;
+  color: black;
   transition: background-color 0.3s;
 }
 nav button:hover {
-  background-color: #ff7875;
+  background-color: #e2e2e2;
 }
 </style>
