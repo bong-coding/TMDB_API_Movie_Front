@@ -5,12 +5,12 @@
       <img src="@/assets/images/logo.png" alt="Logo" />
     </div>
     <nav>
-      <router-link to="/">Home</router-link>
-      <router-link to="/popular">Popular</router-link>
-      <router-link to="/search">Search</router-link>
-      <router-link to="/wishlist">Wishlist</router-link>
-      <router-link to="/signin" v-if="!isLoggedIn">Login</router-link>
-      <button @click="logout" v-else>Logout</button>
+      <router-link to="/">홈</router-link>
+      <router-link to="/popular">대세 콘텐츠</router-link>
+      <router-link to="/search">찾아보기</router-link>
+      <router-link to="/wishlist">찜 목록</router-link>
+      <router-link to="/signin" v-if="!isLoggedIn">로그인</router-link>
+      <button @click="logout" v-else>로그아웃</button>
     </nav>
   </header>
 </template>
