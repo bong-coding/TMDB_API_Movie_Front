@@ -51,7 +51,7 @@
           </div>
           <div class="checkbox-group" v-if="isSignIn">
             <input type="checkbox" id="rememberMe" v-model="rememberMe" />
-            <label for="rememberMe">기억하기</label>
+            <label for="rememberMe">저장</label>
           </div>
           <button type="submit">{{ isSignIn ? "Sign In" : "Sign Up" }}</button>
         </form>
