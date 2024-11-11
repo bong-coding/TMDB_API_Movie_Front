@@ -9,49 +9,43 @@
         <h2>{{ isSignIn ? "Sign In" : "Sign Up" }}</h2>
         <form @submit.prevent="handleSubmit">
           <div class="input-group">
-            <label for="email">
-              <input
-                placeholder="Email"
-                type="email"
-                id="email"
-                v-model="email"
-                @blur="validateEmail"
-                required
-              />
-            </label>
+            <input
+              placeholder="Email"
+              type="email"
+              id="email"
+              v-model="email"
+              @blur="validateEmail"
+              required
+            />
             <span v-if="emailError" class="error">{{ emailError }}</span>
           </div>
           <div class="input-group">
-            <label for="password">
-              <input
-                placeholder="Password"
-                type="password"
-                id="password"
-                v-model="password"
-                required
-              />
-            </label>
+            <input
+              placeholder="Password"
+              type="password"
+              id="password"
+              v-model="password"
+              required
+            />
           </div>
           <div v-if="!isSignIn" class="input-group">
-            <label for="confirmPassword">
-              <input
-                placeholder="Confirm Password"
-                type="password"
-                id="confirmPassword"
-                v-model="confirmPassword"
-                @blur="validatePassword"
-                required
-              />
-            </label>
+            <input
+              placeholder="Confirm Password"
+              type="password"
+              id="confirmPassword"
+              v-model="confirmPassword"
+              @blur="validatePassword"
+              required
+            />
             <span v-if="passwordError" class="error">{{ passwordError }}</span>
           </div>
           <div class="checkbox-group" v-if="!isSignIn">
             <input type="checkbox" id="terms" v-model="terms" required />
-            <label for="terms">약관 동의</label>
+            <label for="terms">I have read Terms and Conditions</label>
           </div>
           <div class="checkbox-group" v-if="isSignIn">
             <input type="checkbox" id="rememberMe" v-model="rememberMe" />
-            <label for="rememberMe">저장</label>
+            <label for="rememberMe">Remember me</label>
           </div>
           <button type="submit">{{ isSignIn ? "Sign In" : "Sign Up" }}</button>
         </form>
@@ -91,7 +85,6 @@ export default {
     };
   },
   mounted() {
-    // 컴포넌트 마운트 시 폼을 표시하여 페이드 인 애니메이션 적용
     this.showForm = true;
   },
   setup() {
@@ -130,7 +123,6 @@ export default {
       }
 
       if (this.isSignIn) {
-        // 로그인 로직
         tryLogin(
           this.email,
           this.password,
@@ -144,7 +136,6 @@ export default {
           }
         );
       } else {
-        // 회원가입 로직
         tryRegister(
           this.email,
           this.password,
@@ -173,13 +164,12 @@ export default {
 </script>
 
 <style scoped>
-/* 기존 스타일 유지 */
 .signin-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 80vh;
-  background-color: #23242a;
+  background-color: #1c1c1c;
 }
 
 .form-container {
@@ -187,51 +177,45 @@ export default {
   padding: 30px;
   border: 1px solid #45f3ff;
   border-radius: 8px;
-  background-color: #1c1c1c;
+  background-color: #23242a;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* h2 요소의 색상을 #42b983로 변경 */
 .form-container h2 {
-  color: #42b983;
+  color: #45f3ff;
 }
 
 .input-group {
   margin-bottom: 20px;
+  position: relative;
 }
 
-/* label 요소의 색상을 #42b983로 변경 */
-.input-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: #42b983;
-}
-
-.input-group label input {
+.input-group input {
   width: 100%;
   padding: 10px;
-  box-sizing: border-box;
-  transition: border-color 0.3s, box-shadow 0.3s;
-  border: 1px solid #45f3ff;
-  border-radius: 4px;
-  outline: none;
-  color: #fff;
   background-color: transparent;
-  margin-top: 5px; /* label과 input 간 간격 조절 */
+  border: none;
+  border-bottom: 1px solid #45f3ff;
+  color: #fff;
+  outline: none;
+  font-size: 1em;
+  transition: border-color 0.3s;
 }
 
-.input-group label input:hover,
-.input-group label input:focus {
-  border-color: #45f3ff;
-  box-shadow: 0 0 8px rgba(69, 243, 255, 0.3);
+.input-group input::placeholder {
+  color: #808080;
+}
+
+.input-group input:focus {
+  border-bottom: 1px solid #45f3ff;
+  box-shadow: 0 1px 8px rgba(69, 243, 255, 0.3);
 }
 
 .checkbox-group {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
-  color: #42b983;
+  color: #45f3ff;
 }
 
 .checkbox-group input {
@@ -243,11 +227,11 @@ button {
   padding: 12px;
   background-color: #45f3ff;
   border: none;
-  color: #42b983;
+  color: black;
   cursor: pointer;
   border-radius: 4px;
-  font-size: 16px;
-  transition: background-color 0.3s, transform 0.2s; /* 애니메이션 추가 */
+  font-size: 20px;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 button:hover {
@@ -263,19 +247,18 @@ button:hover {
 p {
   text-align: center;
   margin-top: 15px;
-  color: #42b983;
+  color: #45f3ff;
 }
 
 p button {
   background: none;
   border: none;
-  color: #42b983;
+  color: #45f3ff;
   cursor: pointer;
   text-decoration: underline;
   font-size: 1em;
 }
 
-/* 페이드 인 애니메이션 */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
