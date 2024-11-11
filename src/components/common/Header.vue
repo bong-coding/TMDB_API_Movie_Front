@@ -1,7 +1,7 @@
 <template>
   <header :class="['header', { scrolled }]">
     <div class="logo" @click="navigateHome">
-      <img src="@/assets/images/logo.png" alt="Logo" />
+      <img src="@/assets/images/file.png" alt="Logo" />
     </div>
     <nav :class="{ open: isMenuOpen }">
       <router-link to="/" @click="closeMenu">홈</router-link>
@@ -122,7 +122,7 @@ nav button {
   transition: color 0.3s;
 }
 nav a:hover {
-  color: #42b983;
+  color: #45f3ff;
 }
 nav button {
   padding: 5px 10px;

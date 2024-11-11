@@ -144,7 +144,7 @@ export default {
         actionMovies.value = actionResponse.data.results;
 
         // 배너 영화 설정 (인기 영화 중 첫 번째 영화 사용)
-        const bannerMovie = popularMovies.value[0];
+        const bannerMovie = popularMovies.value[5];
         bannerImageUrl.value = `https://image.tmdb.org/t/p/original${bannerMovie.backdrop_path}`;
         bannerTitle.value = bannerMovie.title;
         bannerOverview.value = bannerMovie.overview;
