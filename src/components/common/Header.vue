@@ -5,21 +5,28 @@
       <img src="@/assets/images/file.png" alt="Logo" />
     </div>
     <nav :class="{ open: isMenuOpen }">
-      <router-link to="/" @click="closeMenu">홈</router-link>
-      <router-link to="/popular" @click="closeMenu">대세 콘텐츠</router-link>
-      <router-link to="/search" @click="closeMenu">찾아보기</router-link>
-      <router-link to="/wishlist" @click="closeMenu">찜 목록</router-link>
-      <router-link v-if="!isLoggedIn" to="/signin" @click="closeMenu"
-        >로그인</router-link
-      >
-      <button v-else @click="logout">로그아웃</button>
-
-      <!-- 언어 선택 드롭다운 추가 -->
-      <select v-model="selectedLanguage" @change="changeLanguage">
-        <option value="ko-KR">한국어</option>
-        <option value="en-US">English</option>
-        <option value="ja-JP">日本語</option>
-      </select>
+      <!-- 왼쪽 그룹 -->
+      <div class="nav-left">
+        <!-- 언어 선택 드롭다운 -->
+        <select v-model="selectedLanguage" @change="changeLanguage">
+          <option value="ko-KR">한국어</option>
+          <option value="en-US">English</option>
+          <option value="ja-JP">日本語</option>
+        </select>
+        <!-- 네비게이션 링크들 -->
+        <router-link to="/" @click="closeMenu">홈</router-link>
+        <router-link to="/popular" @click="closeMenu">대세 콘텐츠</router-link>
+        <router-link to="/search" @click="closeMenu">찾아보기</router-link>
+        <router-link to="/wishlist" @click="closeMenu">찜 목록</router-link>
+      </div>
+      <!-- 오른쪽 그룹 -->
+      <div class="nav-right">
+        <!-- 로그인/로그아웃 버튼 -->
+        <router-link v-if="!isLoggedIn" to="/signin" @click="closeMenu">
+          로그인
+        </router-link>
+        <button v-else @click="logout">로그아웃</button>
+      </div>
     </nav>
     <button class="hamburger" @click="toggleMenu">
       <span></span>
@@ -88,9 +95,7 @@ export default {
       isMenuOpen.value = false;
     };
 
-    const changeLanguage = () => {
-      // 이미 watch로 처리하고 있으므로 추가 로직은 필요 없음
-    };
+    const changeLanguage = () => {};
 
     onMounted(() => {
       window.addEventListener("scroll", handleScroll);
