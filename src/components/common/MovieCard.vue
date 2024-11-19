@@ -4,7 +4,7 @@
     <img :src="imageUrl" alt="Movie Poster" />
     <div class="movie-info">
       <h3>{{ movie.title }}</h3>
-      <p>{{ truncateText(movie.overview, 100) }}</p>
+      <!-- <p>{{ truncateText(movie.overview, 100) }}</p> -->
     </div>
     <!-- 조건부로 따봉 아이콘 표시 -->
     <div v-if="isInWishlist" class="wishlist-icon">

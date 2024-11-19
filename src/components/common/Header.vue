@@ -1,3 +1,4 @@
+<!-- src/components/common/Header.vue -->
 <template>
   <header :class="['header', { scrolled }]">
     <div class="logo" @click="navigateHome">
@@ -12,6 +13,13 @@
         >로그인</router-link
       >
       <button v-else @click="logout">로그아웃</button>
+
+      <!-- 언어 선택 드롭다운 추가 -->
+      <select v-model="selectedLanguage" @change="changeLanguage">
+        <option value="ko-KR">한국어</option>
+        <option value="en-US">English</option>
+        <option value="ja-JP">日本語</option>
+      </select>
     </nav>
     <button class="hamburger" @click="toggleMenu">
       <span></span>
@@ -36,6 +44,18 @@ export default {
     const router = useRouter();
     const isMenuOpen = ref(false);
     const isLoggedIn = ref(localStorage.getItem("isLoggedIn") === "true");
+
+    // 언어 선택 상태 관리
+    const defaultLanguage = localStorage.getItem("selectedLanguage") || "ko-KR";
+    const selectedLanguage = ref(defaultLanguage);
+
+    watch(
+      () => selectedLanguage.value,
+      (newLang) => {
+        localStorage.setItem("selectedLanguage", newLang);
+        window.location.reload(); // 페이지를 새로고침하여 언어 변경 적용
+      }
+    );
 
     watch(
       () => store.getters["auth/isLoggedIn"],
@@ -68,6 +88,10 @@ export default {
       isMenuOpen.value = false;
     };
 
+    const changeLanguage = () => {
+      // 이미 watch로 처리하고 있으므로 추가 로직은 필요 없음
+    };
+
     onMounted(() => {
       window.addEventListener("scroll", handleScroll);
     });
@@ -84,6 +108,8 @@ export default {
       logout,
       toggleMenu,
       closeMenu,
+      selectedLanguage,
+      changeLanguage,
     };
   },
 };
@@ -91,14 +117,16 @@ export default {
 
 <style scoped>
 .header {
+  /*position: fixed; /* 화면 상단에 고정 */
+  top: 0;
+  left: 0;
+  width: 100%; /* 전체 너비로 설정 */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
   transition: background-color 0.5s, opacity 0.5s;
   background-color: black;
-  position: relative;
-  z-index: 1000;
+  z-index: 1000; /* 다른 요소보다 앞에 표시 */
 }
 .header:hover {
   background-color: #4b4b4b;
@@ -113,6 +141,7 @@ nav {
   gap: 10px;
   padding: 10px 20px;
   transition: background-color 0.3s;
+  align-items: center; /* 수직 정렬 추가 */
 }
 nav a,
 nav button {
@@ -136,12 +165,24 @@ nav button {
 nav button:hover {
   background-color: #e2e2e2;
 }
+nav select {
+  margin-left: 10px;
+  padding: 5px;
+  background-color: #4b4b4b;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+nav select option {
+  background-color: #4b4b4b;
+  color: #fff;
+}
 .hamburger {
   display: none;
   flex-direction: column;
   gap: 5px;
   cursor: pointer;
-  z-index: 1001;
+  z-index: 1001; /* 메뉴 오버레이 위에 표시되도록 z-index 추가 */
 }
 .hamburger span {
   display: block;
@@ -171,13 +212,13 @@ nav button:hover {
     z-index: 1002;
   }
   nav.open a,
-  nav.open button {
+  nav.open button,
+  nav.open select {
     margin-bottom: 10px;
     font-size: 1.2em;
   }
 }
 
-/* 메뉴 오버레이 */
 .menu-overlay {
   position: fixed;
   top: 0;

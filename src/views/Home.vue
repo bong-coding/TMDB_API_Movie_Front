@@ -1,107 +1,120 @@
 <!-- src/views/Home.vue -->
 <template>
   <div class="home">
-    <!-- 배너 섹션 -->
-    <section
-      class="banner"
-      :style="{ backgroundImage: `url(${bannerImageUrl})` }"
-    >
-      <div class="banner-overlay"></div>
-      <div class="banner-content">
-        <h1>{{ bannerTitle }}</h1>
-        <p>{{ bannerOverview }}</p>
-        <div class="banner-buttons">
-          <button @click="togglePlayModal(true)">재생</button>
-          <button @click="toggleModal(true)">상세 정보</button>
+    <!-- 로딩 인디케이터 표시 -->
+    <div v-if="loading" class="loading-indicator">
+      <p>로딩 중...</p>
+    </div>
+
+    <!-- 에러 메시지 표시 -->
+    <div v-else-if="error" class="error-message">
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- 로딩 및 에러가 없을 때 콘텐츠 표시 -->
+    <div v-else>
+      <!-- 배너 섹션 -->
+      <section
+        class="banner"
+        :style="{ backgroundImage: `url(${bannerImageUrl})` }"
+      >
+        <div class="banner-overlay"></div>
+        <div class="banner-content">
+          <h1>{{ bannerTitle }}</h1>
+          <p>{{ bannerOverview }}</p>
+          <div class="banner-buttons">
+            <button @click="togglePlayModal()">재생</button>
+            <button @click="toggleModal(true)">상세 정보</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 상세 정보 모달 창 -->
+      <div v-if="isModalOpen" class="modal-overlay" @click="toggleModal(false)">
+        <div class="modal-content" @click.stop>
+          <h2>{{ bannerTitle }} - 줄거리</h2>
+          <p>{{ bannerOverview }}</p>
+          <button @click="toggleModal(false)">닫기</button>
         </div>
       </div>
-    </section>
 
-    <!-- 상세 정보 모달 창 -->
-    <div v-if="isModalOpen" class="modal-overlay" @click="toggleModal(false)">
-      <div class="modal-content" @click.stop>
-        <h2>{{ bannerTitle }} - 줄거리</h2>
-        <p>{{ bannerOverview }}</p>
-        <button @click="toggleModal(false)">닫기</button>
+      <!-- 재생 모달 창 (유튜브 기능 제외) -->
+      <div
+        v-if="isPlayModalOpen"
+        class="modal-overlay"
+        @click="togglePlayModal()"
+      >
+        <div class="modal-content" @click.stop>
+          <h2>알림</h2>
+          <p>짭플렉스는 재생을 지원하지 않습니다</p>
+          <button @click="togglePlayModal()">닫기</button>
+        </div>
       </div>
+
+      <!-- 인기 영화 섹션 -->
+      <section class="movie-section">
+        <h2>인기 영화</h2>
+        <div
+          class="movies-container"
+          ref="popularContainer"
+          @wheel.prevent="handleWheel($event, 'popularContainer')"
+        >
+          <MovieCard
+            v-for="movie in popularMovies"
+            :key="movie.id"
+            :movie="movie"
+          />
+        </div>
+      </section>
+
+      <!-- 최신 영화 섹션 -->
+      <section class="movie-section">
+        <h2>최신 영화</h2>
+        <div
+          class="movies-container"
+          ref="nowPlayingContainer"
+          @wheel.prevent="handleWheel($event, 'nowPlayingContainer')"
+        >
+          <MovieCard
+            v-for="movie in nowPlayingMovies"
+            :key="movie.id"
+            :movie="movie"
+          />
+        </div>
+      </section>
+
+      <!-- 액션 영화 섹션 -->
+      <section class="movie-section">
+        <h2>액션 영화</h2>
+        <div
+          class="movies-container"
+          ref="actionContainer"
+          @wheel.prevent="handleWheel($event, 'actionContainer')"
+        >
+          <MovieCard
+            v-for="movie in actionMovies"
+            :key="movie.id"
+            :movie="movie"
+          />
+        </div>
+      </section>
+
+      <!-- 로맨스 영화 섹션 -->
+      <section class="movie-section">
+        <h2>로맨스 영화</h2>
+        <div
+          class="movies-container"
+          ref="romanceContainer"
+          @wheel.prevent="handleWheel($event, 'romanceContainer')"
+        >
+          <MovieCard
+            v-for="movie in romanceMovies"
+            :key="movie.id"
+            :movie="movie"
+          />
+        </div>
+      </section>
     </div>
-
-    <!-- 재생 모달 창 -->
-    <div
-      v-if="isPlayModalOpen"
-      class="modal-overlay"
-      @click="togglePlayModal(false)"
-    >
-      <div class="modal-content" @click.stop>
-        <h2>알림</h2>
-        <p>짭플렉스는 재생을 지원하지 않습니다</p>
-        <button @click="togglePlayModal(false)">닫기</button>
-      </div>
-    </div>
-
-    <!-- 인기 영화 섹션 -->
-    <section class="movie-section">
-      <h2>인기 영화</h2>
-      <div
-        class="movies-container"
-        ref="popularContainer"
-        @wheel.prevent="handleWheel($event, 'popularContainer')"
-      >
-        <MovieCard
-          v-for="movie in popularMovies"
-          :key="movie.id"
-          :movie="movie"
-        />
-      </div>
-    </section>
-
-    <!-- 최신 영화 섹션 -->
-    <section class="movie-section">
-      <h2>최신 영화</h2>
-      <div
-        class="movies-container"
-        ref="nowPlayingContainer"
-        @wheel.prevent="handleWheel($event, 'nowPlayingContainer')"
-      >
-        <MovieCard
-          v-for="movie in nowPlayingMovies"
-          :key="movie.id"
-          :movie="movie"
-        />
-      </div>
-    </section>
-
-    <!-- 액션 영화 섹션 -->
-    <section class="movie-section">
-      <h2>액션 영화</h2>
-      <div
-        class="movies-container"
-        ref="actionContainer"
-        @wheel.prevent="handleWheel($event, 'actionContainer')"
-      >
-        <MovieCard
-          v-for="movie in actionMovies"
-          :key="movie.id"
-          :movie="movie"
-        />
-      </div>
-    </section>
-
-    <!-- 로맨스 영화 섹션 추가 -->
-    <section class="movie-section">
-      <h2>로맨스 영화</h2>
-      <div
-        class="movies-container"
-        ref="romanceContainer"
-        @wheel.prevent="handleWheel($event, 'romanceContainer')"
-      >
-        <MovieCard
-          v-for="movie in romanceMovies"
-          :key="movie.id"
-          :movie="movie"
-        />
-      </div>
-    </section>
   </div>
 </template>
 
@@ -119,7 +132,7 @@ export default {
     const popularMovies = ref([]);
     const nowPlayingMovies = ref([]);
     const actionMovies = ref([]);
-    const romanceMovies = ref([]); // 로맨스 영화를 위한 상태 추가
+    const romanceMovies = ref([]);
     const loading = ref(false);
     const error = ref(null);
 
@@ -134,18 +147,19 @@ export default {
     const popularContainer = ref(null);
     const nowPlayingContainer = ref(null);
     const actionContainer = ref(null);
-    const romanceContainer = ref(null); // 로맨스 컨테이너 ref 추가
+    const romanceContainer = ref(null);
 
     const toggleModal = (state) => {
       isModalOpen.value = state;
     };
 
-    const togglePlayModal = (state) => {
-      isPlayModalOpen.value = state;
+    const togglePlayModal = () => {
+      isPlayModalOpen.value = !isPlayModalOpen.value;
     };
 
     const fetchMovies = async () => {
       loading.value = true;
+      error.value = null;
       try {
         // 인기 영화 가져오기
         const popularResponse = await api.get("/movie/popular");
@@ -163,7 +177,7 @@ export default {
 
         // 로맨스 영화 가져오기
         const romanceResponse = await api.get("/discover/movie", {
-          params: { with_genres: 10749 }, // 로맨스 장르 ID는 10749
+          params: { with_genres: 10749 },
         });
         romanceMovies.value = romanceResponse.data.results;
 
@@ -173,7 +187,9 @@ export default {
         bannerTitle.value = bannerMovie.title;
         bannerOverview.value = bannerMovie.overview;
       } catch (err) {
-        error.value = err;
+        error.value =
+          err.response?.data?.status_message ||
+          "데이터를 불러오는 중 에러가 발생했습니다.";
       } finally {
         loading.value = false;
       }
@@ -184,7 +200,7 @@ export default {
         popularContainer,
         nowPlayingContainer,
         actionContainer,
-        romanceContainer, // 로맨스 컨테이너 추가
+        romanceContainer,
       };
       const container = containerMap[containerName];
       if (container.value) {
@@ -200,7 +216,7 @@ export default {
       popularMovies,
       nowPlayingMovies,
       actionMovies,
-      romanceMovies, // 로맨스 영화 상태 반환
+      romanceMovies,
       loading,
       error,
       bannerImageUrl,
@@ -213,7 +229,7 @@ export default {
       popularContainer,
       nowPlayingContainer,
       actionContainer,
-      romanceContainer, // 로맨스 컨테이너 반환
+      romanceContainer,
       handleWheel,
     };
   },
@@ -225,6 +241,44 @@ export default {
   background-color: black;
   color: white;
   padding: 20px;
+}
+
+/* 로딩 인디케이터 스타일 */
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* 화면 전체에 중앙 정렬 */
+  color: white;
+}
+
+.loading-indicator p {
+  font-size: 1.5em;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* 에러 메시지 스타일 */
+.error-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: red;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.error-message p {
+  font-size: 1.2em;
 }
 
 /* 배너 스타일 */

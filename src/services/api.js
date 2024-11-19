@@ -3,11 +3,14 @@ import axios from "axios";
 
 const apiKey = process.env.VUE_APP_TMDB_API_KEY; // .env 파일에 API 키 저장
 
+// 선택한 언어 가져오기
+const selectedLanguage = localStorage.getItem("selectedLanguage") || "ko-KR";
+
 const api = axios.create({
   baseURL: "https://api.themoviedb.org/3",
   params: {
     api_key: apiKey,
-    language: "ko-KR",
+    language: selectedLanguage, // 선택한 언어로 설정
   },
 });
 
