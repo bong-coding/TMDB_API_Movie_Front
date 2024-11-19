@@ -86,6 +86,22 @@
         />
       </div>
     </section>
+
+    <!-- 로맨스 영화 섹션 추가 -->
+    <section class="movie-section">
+      <h2>로맨스 영화</h2>
+      <div
+        class="movies-container"
+        ref="romanceContainer"
+        @wheel.prevent="handleWheel($event, 'romanceContainer')"
+      >
+        <MovieCard
+          v-for="movie in romanceMovies"
+          :key="movie.id"
+          :movie="movie"
+        />
+      </div>
+    </section>
   </div>
 </template>
 
@@ -103,6 +119,7 @@ export default {
     const popularMovies = ref([]);
     const nowPlayingMovies = ref([]);
     const actionMovies = ref([]);
+    const romanceMovies = ref([]); // 로맨스 영화를 위한 상태 추가
     const loading = ref(false);
     const error = ref(null);
 
@@ -117,6 +134,7 @@ export default {
     const popularContainer = ref(null);
     const nowPlayingContainer = ref(null);
     const actionContainer = ref(null);
+    const romanceContainer = ref(null); // 로맨스 컨테이너 ref 추가
 
     const toggleModal = (state) => {
       isModalOpen.value = state;
@@ -143,8 +161,14 @@ export default {
         });
         actionMovies.value = actionResponse.data.results;
 
+        // 로맨스 영화 가져오기
+        const romanceResponse = await api.get("/discover/movie", {
+          params: { with_genres: 10749 }, // 로맨스 장르 ID는 10749
+        });
+        romanceMovies.value = romanceResponse.data.results;
+
         // 배너 영화 설정 (인기 영화 중 첫 번째 영화 사용)
-        const bannerMovie = popularMovies.value[5];
+        const bannerMovie = popularMovies.value[0];
         bannerImageUrl.value = `https://image.tmdb.org/t/p/original${bannerMovie.backdrop_path}`;
         bannerTitle.value = bannerMovie.title;
         bannerOverview.value = bannerMovie.overview;
@@ -160,6 +184,7 @@ export default {
         popularContainer,
         nowPlayingContainer,
         actionContainer,
+        romanceContainer, // 로맨스 컨테이너 추가
       };
       const container = containerMap[containerName];
       if (container.value) {
@@ -175,6 +200,7 @@ export default {
       popularMovies,
       nowPlayingMovies,
       actionMovies,
+      romanceMovies, // 로맨스 영화 상태 반환
       loading,
       error,
       bannerImageUrl,
@@ -187,6 +213,7 @@ export default {
       popularContainer,
       nowPlayingContainer,
       actionContainer,
+      romanceContainer, // 로맨스 컨테이너 반환
       handleWheel,
     };
   },
@@ -209,7 +236,7 @@ export default {
   margin-bottom: 40px;
   background-size: cover;
   background-position: center;
-  padding-left: 40px; /* 왼쪽 여백 추가 */
+  padding-left: 40px;
 }
 
 .banner-overlay {
@@ -218,7 +245,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* 어두운 오버레이 추가 */
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
 
@@ -249,7 +276,7 @@ export default {
 }
 
 .banner-buttons button {
-  padding: 10px 30px; /* 버튼 크기 조정 */
+  padding: 10px 30px;
   cursor: pointer;
   background-color: #4b4b4b;
   border: none;
@@ -307,6 +334,11 @@ export default {
 /* 영화 섹션 스타일 */
 .movie-section {
   margin-bottom: 40px;
+}
+
+.movie-section h2 {
+  margin-bottom: 20px;
+  text-align: left;
 }
 
 .movies-container {
