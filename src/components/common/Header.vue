@@ -223,7 +223,13 @@ nav select option {
     font-size: 1.2em;
   }
 }
-
+nav.open .nav-left,
+nav.open .nav-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
 .menu-overlay {
   position: fixed;
   top: 0;

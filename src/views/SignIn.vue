@@ -253,7 +253,7 @@ p {
 p button {
   background: none;
   border: none;
-  color: #45f3ff;
+  color: #79be2d;
   cursor: pointer;
   text-decoration: underline;
   font-size: 1em;
