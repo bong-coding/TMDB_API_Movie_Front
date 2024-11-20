@@ -1,3 +1,4 @@
+<!-- src/views/Popular.vue -->
 <template>
   <div class="popular">
     <h1>Popular Movies</h1>

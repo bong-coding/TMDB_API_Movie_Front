@@ -10,14 +10,12 @@ const api = axios.create({
   baseURL: "https://api.themoviedb.org/3",
   params: {
     api_key: apiKey,
-    language: selectedLanguage, // 선택한 언어로 설정
+    language: selectedLanguage, 
   },
 });
 
-// 요청 인터셉터 (필요 시)
 api.interceptors.request.use(
   (config) => {
-    // 예: 토큰 추가 (필요 시)
     const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -31,7 +29,6 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // 예: 에러 처리
     return Promise.reject(error);
   }
 );

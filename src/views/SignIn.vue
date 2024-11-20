@@ -1,3 +1,4 @@
+<!-- src/views/SignIn.vue -->
 <template>
   <div class="signin-container">
     <transition name="fade" mode="out-in">

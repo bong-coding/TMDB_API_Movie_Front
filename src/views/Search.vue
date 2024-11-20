@@ -1,3 +1,4 @@
+<!-- src/views/Search.vue -->
 <template>
   <div class="search-page">
     <div class="filter-header">
