@@ -1,18 +1,13 @@
+<!-- src/views/Home.vue -->
 <template>
   <div class="home">
-    <!-- 로딩 인디케이터 표시 -->
     <div v-if="loading" class="loading-indicator">
       <p>로딩 중...</p>
     </div>
-
-    <!-- 에러 메시지 표시 -->
     <div v-else-if="error" class="error-message">
       <p>{{ error }}</p>
     </div>
-
-    <!-- 로딩 및 에러가 없을 때 콘텐츠 표시 -->
     <div v-else>
-      <!-- 배너 섹션 -->
       <section
         class="banner"
         :style="{ backgroundImage: `url(${bannerImageUrl})` }"
@@ -129,7 +124,7 @@ export default {
   },
   setup() {
     const popularMovies = ref([]);
-    const animationMovies = ref([]); // 애니메이션 영화 변수
+    const animationMovies = ref([]);
     const actionMovies = ref([]);
     const romanceMovies = ref([]);
     const loading = ref(false);
@@ -144,7 +139,7 @@ export default {
 
     // 각 컨테이너에 대한 ref 정의
     const popularContainer = ref(null);
-    const animationContainer = ref(null); // 애니메이션 컨테이너
+    const animationContainer = ref(null);
     const actionContainer = ref(null);
     const romanceContainer = ref(null);
 
@@ -182,7 +177,7 @@ export default {
         });
         romanceMovies.value = romanceResponse.data.results;
 
-        // 배너 영화 설정 (인기 영화 중 첫 번째 영화 사용)
+        // 배너 영화 설정 9번째 영화 트랜스포머?
         const bannerMovie = popularMovies.value[8];
         bannerImageUrl.value = `https://image.tmdb.org/t/p/original${bannerMovie.backdrop_path}`;
         bannerTitle.value = bannerMovie.title;
@@ -199,7 +194,7 @@ export default {
     const handleWheel = (event, containerName) => {
       const containerMap = {
         popularContainer,
-        animationContainer, // 애니메이션 컨테이너
+        animationContainer,
         actionContainer,
         romanceContainer,
       };
@@ -215,7 +210,7 @@ export default {
 
     return {
       popularMovies,
-      animationMovies, // 애니메이션 영화 반환
+      animationMovies,
       actionMovies,
       romanceMovies,
       loading,
@@ -228,7 +223,7 @@ export default {
       toggleModal,
       togglePlayModal,
       popularContainer,
-      animationContainer, // 애니메이션 컨테이너 반환
+      animationContainer,
       actionContainer,
       romanceContainer,
       handleWheel,
@@ -249,7 +244,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* 화면 전체에 중앙 정렬 */
+  height: 100vh;
   color: white;
 }
 
@@ -267,7 +262,6 @@ export default {
   }
 }
 
-/* 에러 메시지 스타일 */
 .error-message {
   display: flex;
   justify-content: center;
@@ -282,7 +276,6 @@ export default {
   font-size: 1.2em;
 }
 
-/* 배너 스타일 */
 .banner {
   position: relative;
   display: flex;
@@ -345,7 +338,6 @@ export default {
   background-color: #e6e6e6;
 }
 
-/* 모달 스타일 */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -386,7 +378,6 @@ export default {
   background-color: #333;
 }
 
-/* 영화 섹션 스타일 */
 .movie-section {
   margin-bottom: 40px;
 }
