@@ -1,4 +1,3 @@
-<!-- src/views/Home.vue -->
 <template>
   <div class="home">
     <!-- 로딩 인디케이터 표시 -->
@@ -38,7 +37,7 @@
         </div>
       </div>
 
-      <!-- 재생 모달 창 (유튜브 기능 제외) -->
+      <!-- 재생 모달 창 -->
       <div
         v-if="isPlayModalOpen"
         class="modal-overlay"
@@ -67,16 +66,16 @@
         </div>
       </section>
 
-      <!-- 최신 영화 섹션 -->
+      <!-- 애니메이션 영화 섹션 -->
       <section class="movie-section">
-        <h2>최신 영화</h2>
+        <h2>애니메이션 영화</h2>
         <div
           class="movies-container"
-          ref="nowPlayingContainer"
-          @wheel.prevent="handleWheel($event, 'nowPlayingContainer')"
+          ref="animationContainer"
+          @wheel.prevent="handleWheel($event, 'animationContainer')"
         >
           <MovieCard
-            v-for="movie in nowPlayingMovies"
+            v-for="movie in animationMovies"
             :key="movie.id"
             :movie="movie"
           />
@@ -130,7 +129,7 @@ export default {
   },
   setup() {
     const popularMovies = ref([]);
-    const nowPlayingMovies = ref([]);
+    const animationMovies = ref([]); // 애니메이션 영화 변수
     const actionMovies = ref([]);
     const romanceMovies = ref([]);
     const loading = ref(false);
@@ -140,12 +139,12 @@ export default {
     const bannerImageUrl = ref("");
     const bannerTitle = ref("");
     const bannerOverview = ref("");
-    const isModalOpen = ref(false); // 상세 정보 모달 상태
-    const isPlayModalOpen = ref(false); // 재생 모달 상태
+    const isModalOpen = ref(false);
+    const isPlayModalOpen = ref(false);
 
     // 각 컨테이너에 대한 ref 정의
     const popularContainer = ref(null);
-    const nowPlayingContainer = ref(null);
+    const animationContainer = ref(null); // 애니메이션 컨테이너
     const actionContainer = ref(null);
     const romanceContainer = ref(null);
 
@@ -165,9 +164,11 @@ export default {
         const popularResponse = await api.get("/movie/popular");
         popularMovies.value = popularResponse.data.results;
 
-        // 최신 영화 가져오기
-        const nowPlayingResponse = await api.get("/movie/now_playing");
-        nowPlayingMovies.value = nowPlayingResponse.data.results;
+        // 애니메이션 영화 가져오기
+        const animationResponse = await api.get("/discover/movie", {
+          params: { with_genres: 16 },
+        });
+        animationMovies.value = animationResponse.data.results;
 
         // 액션 영화 가져오기
         const actionResponse = await api.get("/discover/movie", {
@@ -182,7 +183,7 @@ export default {
         romanceMovies.value = romanceResponse.data.results;
 
         // 배너 영화 설정 (인기 영화 중 첫 번째 영화 사용)
-        const bannerMovie = popularMovies.value[0];
+        const bannerMovie = popularMovies.value[8];
         bannerImageUrl.value = `https://image.tmdb.org/t/p/original${bannerMovie.backdrop_path}`;
         bannerTitle.value = bannerMovie.title;
         bannerOverview.value = bannerMovie.overview;
@@ -198,7 +199,7 @@ export default {
     const handleWheel = (event, containerName) => {
       const containerMap = {
         popularContainer,
-        nowPlayingContainer,
+        animationContainer, // 애니메이션 컨테이너
         actionContainer,
         romanceContainer,
       };
@@ -214,7 +215,7 @@ export default {
 
     return {
       popularMovies,
-      nowPlayingMovies,
+      animationMovies, // 애니메이션 영화 반환
       actionMovies,
       romanceMovies,
       loading,
@@ -227,7 +228,7 @@ export default {
       toggleModal,
       togglePlayModal,
       popularContainer,
-      nowPlayingContainer,
+      animationContainer, // 애니메이션 컨테이너 반환
       actionContainer,
       romanceContainer,
       handleWheel,
