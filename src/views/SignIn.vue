@@ -132,13 +132,15 @@ export default {
   mounted() {
     try {
       this.showForm = true;
-      // Kakao SDK 초기화
+      // 중복 초기화 제거
+      /*
       if (window.Kakao && !window.Kakao.isInitialized()) {
         console.log("Kakao key is:", process.env.VUE_APP_KAKAO_JAVASCRIPT_KEY);
         console.log("Kakao object:", window.Kakao);
         window.Kakao.init(process.env.VUE_APP_KAKAO_JAVASCRIPT_KEY);
         console.log("Kakao SDK Initialized!");
       }
+      */
     } catch (e) {
       console.error("SignIn mounted error:", e);
     }

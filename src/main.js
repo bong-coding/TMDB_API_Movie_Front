@@ -6,4 +6,14 @@ import store from "./store";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
-createApp(App).use(store).use(router).use(Toast).mount("#app");
+const app = createApp(App);
+
+// 카카오 SDK 초기화
+if (window.Kakao && !window.Kakao.isInitialized()) {
+  window.Kakao.init(process.env.VUE_APP_KAKAO_JAVASCRIPT_KEY);
+  console.log("Kakao SDK Initialized in main.js!");
+} else {
+  console.warn("Kakao SDK not available or already initialized.");
+}
+
+app.use(store).use(router).use(Toast).mount("#app");

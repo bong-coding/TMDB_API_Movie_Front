@@ -154,14 +154,10 @@ export default {
       // Kakao 객체 및 토큰 체크
       if (
         !window.Kakao ||
-        !window.Kakao.isInitialized ||
-        !window.Kakao.isInitialized()
+        !window.Kakao.Auth ||
+        !window.Kakao.Auth.getAccessToken()
       ) {
         toast.error("카카오 SDK가 로드되지 않았거나 초기화되지 않았습니다.");
-        return;
-      }
-      if (!window.Kakao.Auth || !window.Kakao.Auth.getAccessToken()) {
-        toast.error("카카오 로그인 정보가 없습니다. 다시 로그인 해주세요.");
         return;
       }
 
