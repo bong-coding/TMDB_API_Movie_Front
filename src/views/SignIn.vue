@@ -122,9 +122,9 @@ export default {
       terms: false,
       emailError: "",
       passwordError: "",
-      showForm: false, // 폼 표시 여부
+      showForm: false, 
 
-      // (추가) 프로필 모달
+      // 프로필 모달
       showProfileModal: false,
       profileData: null, // { nickname, imageUrl }
     };
@@ -220,7 +220,7 @@ export default {
       window.Kakao.Auth.login({
         scope: "profile_nickname,profile_image",
         success: () => {
-          // 로그인 성공 → 사용자 정보 가져오기
+          // 로그인 성공  사용자 정보 가져오기
           window.Kakao.API.request({
             url: "/v2/user/me",
             success: (res) => {
@@ -235,7 +235,7 @@ export default {
               this.login({ user: userData, rememberMe: true });
               this.toast.success("카카오 로그인 성공!");
 
-              // 콘솔에 닉네임 + 이미지 출력
+              // 콘솔에 닉네임 이미지
               console.log("카카오 전체 프로필:", res);
               console.log("닉네임:", userData.nickname);
               console.log("프로필 이미지:", userData.imageUrl);
@@ -255,7 +255,7 @@ export default {
       });
     },
 
-    // 회원정보 조회 (예: 다시 API 호출 or Vuex에서 user 꺼내 표시)
+    // 회원정보 조회 
     fetchKakaoProfile() {
       if (!window.Kakao || !window.Kakao.isInitialized()) {
         this.toast.error("카카오 SDK가 초기화되지 않았습니다.");
@@ -412,18 +412,16 @@ p {
 p button {
   background: none;
   border: none;
-  color: #ffd700; /* 노란색으로 변경 */
+  color: #ffd700; 
   cursor: pointer;
   text-decoration: underline;
   font-size: 1em;
 }
 
 .kakao-text {
-  font-weight: bold; /* "Kakao"만 굵게 */
-  /* 추가 스타일이 필요하다면 여기에 추가 */
+  font-weight: bold; 
 }
 
-/* 모달 */
 .profile-modal {
   position: fixed;
   top: 0;

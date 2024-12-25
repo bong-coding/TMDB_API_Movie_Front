@@ -214,7 +214,6 @@ export default {
       showProfileModal,
       profileData,
       showProfileImage,
-      // 메서드
       toggleMenu,
       closeMenu,
       changeLanguage,
@@ -360,7 +359,6 @@ nav.open .nav-right {
   z-index: 1001;
 }
 
-/* 프로필 모달 */
 .profile-modal {
   position: fixed;
   top: 0;
