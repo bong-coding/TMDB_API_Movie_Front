@@ -122,7 +122,7 @@ export default {
       terms: false,
       emailError: "",
       passwordError: "",
-      showForm: false, 
+      showForm: false,
 
       // 프로필 모달
       showProfileModal: false,
@@ -255,7 +255,7 @@ export default {
       });
     },
 
-    // 회원정보 조회 
+    // 회원정보 조회
     fetchKakaoProfile() {
       if (!window.Kakao || !window.Kakao.isInitialized()) {
         this.toast.error("카카오 SDK가 초기화되지 않았습니다.");
@@ -412,14 +412,14 @@ p {
 p button {
   background: none;
   border: none;
-  color: #ffd700; 
+  color: #ffd700;
   cursor: pointer;
   text-decoration: underline;
   font-size: 1em;
 }
 
 .kakao-text {
-  font-weight: bold; 
+  font-weight: bold;
 }
 
 .profile-modal {
