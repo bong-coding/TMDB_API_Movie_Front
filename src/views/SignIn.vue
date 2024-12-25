@@ -8,6 +8,7 @@
         :key="isSignIn ? 'sign-in' : 'sign-up'"
       >
         <h2>{{ isSignIn ? "Sign In" : "Sign Up" }}</h2>
+
         <form @submit.prevent="handleSubmit">
           <div class="input-group">
             <input
@@ -20,6 +21,7 @@
             />
             <span v-if="emailError" class="error">{{ emailError }}</span>
           </div>
+
           <div class="input-group">
             <input
               placeholder="Password"
@@ -29,6 +31,7 @@
               required
             />
           </div>
+
           <div v-if="!isSignIn" class="input-group">
             <input
               placeholder="Confirm Password"
@@ -40,16 +43,32 @@
             />
             <span v-if="passwordError" class="error">{{ passwordError }}</span>
           </div>
+
           <div class="checkbox-group" v-if="!isSignIn">
             <input type="checkbox" id="terms" v-model="terms" required />
             <label for="terms">I have read Terms and Conditions</label>
           </div>
+
           <div class="checkbox-group" v-if="isSignIn">
             <input type="checkbox" id="rememberMe" v-model="rememberMe" />
             <label for="rememberMe">Remember me</label>
           </div>
-          <button type="submit">{{ isSignIn ? "Sign In" : "Sign Up" }}</button>
+
+          <button type="submit">
+            {{ isSignIn ? "Sign In" : "Sign Up" }}
+          </button>
         </form>
+
+        <!-- 카카오로 로그인 버튼 -->
+        <button class="kakao-btn" type="button" @click="kakaoLogin">
+          Login with <span class="kakao-text">Kakao</span>
+        </button>
+
+        <!-- 회원정보 조회 버튼 (모달 열기) -->
+        <button class="profile-btn" type="button" @click="fetchKakaoProfile">
+          Member information inquiry
+        </button>
+
         <p>
           <span>
             {{
@@ -62,6 +81,27 @@
         </p>
       </div>
     </transition>
+
+    <!-- 프로필 모달 -->
+    <div v-if="showProfileModal" class="profile-modal">
+      <div class="profile-modal-content">
+        <h2>카카오 프로필</h2>
+        <div v-if="profileData">
+          <p><strong>닉네임:</strong> {{ profileData.nickname }}</p>
+          <p>
+            <strong>프로필 이미지:</strong><br />
+            <img
+              v-if="profileData.imageUrl"
+              :src="profileData.imageUrl"
+              alt="프로필 이미지"
+              style="width: 100px; height: 100px; object-fit: cover"
+            />
+            <span v-else>이미지 없음</span>
+          </p>
+        </div>
+        <button @click="closeProfileModal">닫기</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -82,11 +122,26 @@ export default {
       terms: false,
       emailError: "",
       passwordError: "",
-      showForm: false, // 폼 표시 여부를 위한 데이터 추가
+      showForm: false, // 폼 표시 여부
+
+      // (추가) 프로필 모달
+      showProfileModal: false,
+      profileData: null, // { nickname, imageUrl }
     };
   },
   mounted() {
-    this.showForm = true;
+    try {
+      this.showForm = true;
+      // Kakao SDK 초기화
+      if (window.Kakao && !window.Kakao.isInitialized()) {
+        console.log("Kakao key is:", process.env.VUE_APP_KAKAO_JAVASCRIPT_KEY);
+        console.log("Kakao object:", window.Kakao);
+        window.Kakao.init(process.env.VUE_APP_KAKAO_JAVASCRIPT_KEY);
+        console.log("Kakao SDK Initialized!");
+      }
+    } catch (e) {
+      console.error("SignIn mounted error:", e);
+    }
   },
   setup() {
     const toast = useToast();
@@ -94,6 +149,7 @@ export default {
   },
   methods: {
     ...mapActions("auth", ["login"]),
+
     toggleForm() {
       this.isSignIn = !this.isSignIn;
       this.resetForm();
@@ -124,6 +180,7 @@ export default {
       }
 
       if (this.isSignIn) {
+        // 로컬 로그인
         tryLogin(
           this.email,
           this.password,
@@ -137,6 +194,7 @@ export default {
           }
         );
       } else {
+        // 회원가입
         tryRegister(
           this.email,
           this.password,
@@ -151,6 +209,94 @@ export default {
         );
       }
     },
+
+    kakaoLogin() {
+      if (!window.Kakao || !window.Kakao.isInitialized()) {
+        this.toast.error(
+          "카카오 SDK가 로드되지 않았거나 초기화되지 않았습니다."
+        );
+        return;
+      }
+      window.Kakao.Auth.login({
+        scope: "profile_nickname,profile_image",
+        success: () => {
+          // 로그인 성공 → 사용자 정보 가져오기
+          window.Kakao.API.request({
+            url: "/v2/user/me",
+            success: (res) => {
+              const kakaoAccount = res.kakao_account || {};
+              const userData = {
+                id: res.id,
+                nickname: kakaoAccount.profile?.nickname || "",
+                imageUrl: kakaoAccount.profile?.profile_image_url || "",
+              };
+
+              // Vuex 로그인
+              this.login({ user: userData, rememberMe: true });
+              this.toast.success("카카오 로그인 성공!");
+
+              // 콘솔에 닉네임 + 이미지 출력
+              console.log("카카오 전체 프로필:", res);
+              console.log("닉네임:", userData.nickname);
+              console.log("프로필 이미지:", userData.imageUrl);
+
+              this.$router.push("/");
+            },
+            fail: (error) => {
+              this.toast.error("카카오 사용자 정보 요청 실패");
+              console.error(error);
+            },
+          });
+        },
+        fail: (err) => {
+          this.toast.error("카카오 로그인 실패");
+          console.error(err);
+        },
+      });
+    },
+
+    // 회원정보 조회 (예: 다시 API 호출 or Vuex에서 user 꺼내 표시)
+    fetchKakaoProfile() {
+      if (!window.Kakao || !window.Kakao.isInitialized()) {
+        this.toast.error("카카오 SDK가 초기화되지 않았습니다.");
+        return;
+      }
+      if (!window.Kakao.Auth.getAccessToken()) {
+        this.toast.error(
+          "카카오 로그인 정보가 없습니다. 다시 로그인 해주세요."
+        );
+        return;
+      }
+
+      // 다시 API 호출 (중복 로그인 없이 프로필만 재확인)
+      window.Kakao.API.request({
+        url: "/v2/user/me",
+        success: (res) => {
+          const nickname = res.kakao_account?.profile?.nickname || "";
+          const imageUrl = res.kakao_account?.profile?.profile_image_url || "";
+
+          // 콘솔 출력
+          console.log("회원정보 조회 - 닉네임:", nickname);
+          console.log("회원정보 조회 - 프로필이미지:", imageUrl);
+
+          // 모달 표시
+          this.profileData = {
+            nickname,
+            imageUrl,
+          };
+          this.showProfileModal = true;
+        },
+        fail: (error) => {
+          this.toast.error("회원정보 조회 실패");
+          console.error("회원정보 조회 실패:", error);
+        },
+      });
+    },
+
+    closeProfileModal() {
+      this.showProfileModal = false;
+    },
+
     resetForm() {
       this.email = "";
       this.password = "";
@@ -218,7 +364,6 @@ export default {
   margin-bottom: 20px;
   color: #45f3ff;
 }
-
 .checkbox-group input {
   margin-right: 10px;
 }
@@ -226,7 +371,7 @@ export default {
 button {
   width: 100%;
   padding: 12px;
-  background-color: #45f3ff;
+  background-color: #fee500;
   border: none;
   color: black;
   cursor: pointer;
@@ -238,6 +383,19 @@ button {
 button:hover {
   background-color: #45f3ff;
   transform: scale(1.05);
+}
+
+.kakao-btn {
+  background-color: #fee500;
+  color: #000;
+  /* font-weight: bold; */ /* 이 줄을 주석 처리하거나 제거 */
+  margin-top: 10px;
+}
+
+.profile-btn {
+  background-color: #fee500;
+  color: #000;
+  margin-top: 10px;
 }
 
 .error {
@@ -254,17 +412,43 @@ p {
 p button {
   background: none;
   border: none;
-  color: #79be2d;
+  color: #ffd700; /* 노란색으로 변경 */
   cursor: pointer;
   text-decoration: underline;
   font-size: 1em;
+}
+
+.kakao-text {
+  font-weight: bold; /* "Kakao"만 굵게 */
+  /* 추가 스타일이 필요하다면 여기에 추가 */
+}
+
+/* 모달 */
+.profile-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profile-modal-content {
+  background: #fff;
+  color: #000;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
 }
 
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
 }
-
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
