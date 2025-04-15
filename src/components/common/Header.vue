@@ -39,6 +39,29 @@
         >
       </div>
     </div>
+
+    <!-- 카카오 프로필 모달 -->
+    <div
+      v-if="showProfileModal"
+      class="profile-modal"
+      @click.self="showProfileModal = false"
+    >
+      <div class="profile-modal-content">
+        <h2>카카오 프로필</h2>
+        <div v-if="profileData">
+          <p><strong>닉네임:</strong> {{ profileData.nickname }}</p>
+          <p v-if="profileData.imageUrl">
+            <img
+              :src="profileData.imageUrl"
+              alt="프로필 이미지"
+              class="profile-img"
+            />
+          </p>
+          <p v-else>프로필 이미지 없음</p>
+        </div>
+        <button @click="showProfileModal = false">닫기</button>
+      </div>
+    </div>
   </header>
 </template>
 
@@ -74,6 +97,7 @@ const logout = () => {
   router.push("/signin");
 };
 
+// 프로필 모달
 const showProfileModal = ref(false);
 const profileData = ref(null);
 const fetchProfile = () => {
@@ -211,5 +235,36 @@ button:hover,
   color: #ccc;
   font-size: 14px;
   font-weight: 500;
+}
+
+/* 프로필 모달 */
+.profile-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-modal-content {
+  background: #111;
+  color: #eee;
+  padding: 24px 32px;
+  border-radius: 12px;
+  width: 300px;
+  text-align: center;
+}
+
+.profile-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-top: 10px;
 }
 </style>
