@@ -10,38 +10,53 @@
         <h2>{{ isSignIn ? "Sign In" : "Sign Up" }}</h2>
 
         <form @submit.prevent="handleSubmit">
-          <div class="input-group">
+          <!-- 이메일 -->
+          <div class="input-group" :class="{ error: emailError }">
+            <i class="input-icon fas fa-user"></i>
             <input
-              placeholder="Email"
               type="email"
               id="email"
               v-model="email"
-              @blur="validateEmail"
               required
+              placeholder=" "
+              @blur="validateEmail"
             />
-            <span v-if="emailError" class="error">{{ emailError }}</span>
+            <label for="email">Email</label>
+            <span v-if="emailError" class="error-text">{{ emailError }}</span>
           </div>
 
+          <!-- 비밀번호 -->
           <div class="input-group">
+            <i class="input-icon fas fa-lock"></i>
             <input
-              placeholder="Password"
               type="password"
               id="password"
               v-model="password"
               required
+              placeholder=" "
             />
+            <label for="password">Password</label>
           </div>
 
-          <div v-if="!isSignIn" class="input-group">
+          <!-- 확인 비밀번호 (회원가입 시) -->
+          <div
+            v-if="!isSignIn"
+            class="input-group"
+            :class="{ error: passwordError }"
+          >
+            <i class="input-icon fas fa-lock"></i>
             <input
-              placeholder="Confirm Password"
               type="password"
               id="confirmPassword"
               v-model="confirmPassword"
               @blur="validatePassword"
               required
+              placeholder=" "
             />
-            <span v-if="passwordError" class="error">{{ passwordError }}</span>
+            <label for="confirmPassword">Confirm Password</label>
+            <span v-if="passwordError" class="error-text">{{
+              passwordError
+            }}</span>
           </div>
 
           <div class="checkbox-group" v-if="!isSignIn">
@@ -315,111 +330,156 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
-  background-color: #1c1c1c;
+  flex: 1;
+  height: 100%;
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  padding: 40px 0;
 }
 
 .form-container {
   width: 400px;
   padding: 30px;
-  border: 1px solid #45f3ff;
-  border-radius: 8px;
-  background-color: #23242a;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  text-align: left;
+  position: relative;
 }
 
 .form-container h2 {
-  color: #45f3ff;
+  font-size: 1.8em;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #fff;
 }
 
 .input-group {
-  margin-bottom: 20px;
   position: relative;
+  margin-bottom: 24px;
 }
 
 .input-group input {
   width: 100%;
-  padding: 10px;
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid #45f3ff;
+  padding: 12px 12px 12px 40px;
+  font-size: 16px;
   color: #fff;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #999;
   outline: none;
-  font-size: 1em;
   transition: border-color 0.3s;
+  box-sizing: border-box;
 }
 
 .input-group input::placeholder {
-  color: #808080;
+  color: #aaa;
+  opacity: 1;
+}
+
+.input-group input:hover {
+  border-bottom: 2px solid #ccc;
 }
 
 .input-group input:focus {
-  border-bottom: 1px solid #45f3ff;
-  box-shadow: 0 1px 8px rgba(69, 243, 255, 0.3);
+  border-bottom: 2px solid #45f3ff;
+}
+
+.input-icon {
+  position: absolute;
+  top: 12px;
+  left: 10px;
+  color: #aaa;
+  font-size: 16px;
+}
+
+.input-group label {
+  position: absolute;
+  top: 12px;
+  left: 40px;
+  font-size: 16px;
+  color: #aaa;
+  pointer-events: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+  top: -10px;
+  font-size: 13px;
+  color: #45f3ff;
+  background: none;
+  padding: 0;
+}
+
+.input-group.error input {
+  border-bottom: 2px solid red;
+}
+
+.error-text {
+  color: red;
+  font-size: 0.85em;
+  margin-top: 4px;
+  display: block;
+  padding-left: 2px;
 }
 
 .checkbox-group {
   display: flex;
   align-items: center;
+  gap: 8px;
+  font-size: 0.9em;
+  color: #ccc;
   margin-bottom: 20px;
-  color: #45f3ff;
 }
-.checkbox-group input {
-  margin-right: 10px;
+
+.checkbox-group label {
+  margin-left: 8px;
 }
 
 button {
   width: 100%;
   padding: 12px;
-  background-color: #fee500;
-  border: none;
-  color: black;
+  margin-bottom: 12px;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 500;
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 20px;
-  transition: background-color 0.3s, transform 0.2s;
+  transition: all 0.3s ease-in-out;
+  backdrop-filter: blur(4px);
 }
 
 button:hover {
-  background-color: #45f3ff;
-  transform: scale(1.05);
+  background-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
 }
 
-.kakao-btn {
-  background-color: #fee500;
-  color: #000;
-  /* font-weight: bold; */ /* 이 줄을 주석 처리하거나 제거 */
-  margin-top: 10px;
-}
-
-.profile-btn {
-  background-color: #fee500;
-  color: #000;
-  margin-top: 10px;
-}
-
-.error {
-  color: red;
-  font-size: 0.9em;
+.kakao-text {
+  font-weight: bold;
 }
 
 p {
   text-align: center;
-  margin-top: 15px;
-  color: #45f3ff;
+  font-size: 0.9em;
+  color: #ccc;
+  margin-top: 16px;
 }
 
 p button {
   background: none;
   border: none;
-  color: #ffd700;
-  cursor: pointer;
+  color: #45f3ff;
   text-decoration: underline;
+  cursor: pointer;
   font-size: 1em;
-}
-
-.kakao-text {
-  font-weight: bold;
 }
 
 .profile-modal {
@@ -434,6 +494,7 @@ p button {
   align-items: center;
   justify-content: center;
 }
+
 .profile-modal-content {
   background: #fff;
   color: #000;
@@ -447,8 +508,16 @@ p button {
 .fade-leave-active {
   transition: opacity 0.5s;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* 오토필 색상 맞춤 */
+input:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.08) inset !important;
+  -webkit-text-fill-color: #fff !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 </style>

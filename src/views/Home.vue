@@ -45,7 +45,7 @@
       >
         <div class="modal-content" @click.stop>
           <h2>알림</h2>
-          <p>짭플렉스는 재생을 지원하지 않습니다</p>
+          <p>돈주고 봐라 ㅗ</p>
           <button @click="togglePlayModal()">닫기</button>
         </div>
       </div>
@@ -183,7 +183,7 @@ export default {
         romanceMovies.value = romanceResponse.data.results;
 
         // 배너 영화 설정 (인기 영화 중 첫 번째 영화 사용)
-        const bannerMovie = popularMovies.value[8];
+        const bannerMovie = popularMovies.value[1];
         bannerImageUrl.value = `https://image.tmdb.org/t/p/original${bannerMovie.backdrop_path}`;
         bannerTitle.value = bannerMovie.title;
         bannerOverview.value = bannerMovie.overview;

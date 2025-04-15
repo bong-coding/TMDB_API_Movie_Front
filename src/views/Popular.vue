@@ -162,79 +162,137 @@ export default {
 
 <style scoped>
 .popular {
-  padding: 20px;
-  background-color: black;
+  padding: 40px 0;
+  background-color: #0e0e0e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  color: #fff;
 }
+
+/* 🎯 버튼 영역 */
 .view-toggle {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 24px;
 }
+
 .view-toggle button {
-  padding: 10px 20px;
-  margin: 0 10px;
+  padding: 10px 22px;
+  margin: 0 6px;
+  border: 2px solid #00e5ff;
+  border-radius: 999px;
+  background-color: transparent;
+  color: #00e5ff;
+  font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
-  border: none;
-  background-color: #4b4b4b;
-  color: white;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+  transition: all 0.25s ease;
 }
-.view-toggle button.active,
+
 .view-toggle button:hover {
-  background-color: #e2e2e2;
-  color: black;
+  background-color: #00bcd4;
+  color: #000;
 }
-.table-view table {
+
+.view-toggle button.active {
+  background-color: transparent;
+  color: #00e5ff;
+  border: 2px solid #00e5ff;
+}
+
+.view-toggle button.active:hover {
+  background-color: #00bcd4;
+  color: #000;
+}
+
+/* 📊 테이블 뷰 전체 레이아웃 */
+.table-view {
   width: 100%;
-  border-collapse: collapse;
+  display: flex;
+  justify-content: center;
 }
+
+.table-view table {
+  width: 90%;
+  max-width: 80%;
+  border-collapse: collapse;
+  background-color: #1a1a1a;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 188, 212, 0.15);
+}
+
+/* 🧾 테이블 셀 스타일 */
 .table-view th,
 .table-view td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  color: white;
+  padding: 16px;
+  text-align: left;
+  vertical-align: middle;
+  color: #f5f5f5;
+  border-bottom: 1px solid #333;
 }
-.table-view img {
-  width: 100px;
-  height: auto;
-}
+
 .table-view th {
-  background-color: #23242a;
+  background-color: #222;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
 }
+
+/* 🖼️ 포스터 이미지 */
+.table-view img {
+  width: 80px;
+  height: auto;
+  border-radius: 4px;
+}
+
+/* ⏩ 페이지네이션 버튼 */
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 30px;
+  gap: 12px;
   color: white;
 }
+
 .pagination button {
-  padding: 10px 20px;
-  margin: 0 10px;
+  padding: 10px 18px;
+  border: 2px solid #00bcd4;
+  background-color: transparent;
+  color: #00bcd4;
+  font-weight: 600;
+  border-radius: 20px;
   cursor: pointer;
-  border: none;
-  background-color: #4b4b4b;
-  color: white;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+  transition: all 0.3s;
 }
-.pagination button:disabled {
-  background-color: #333;
-  cursor: not-allowed;
-}
+
 .pagination button:hover:not(:disabled) {
-  background-color: #e2e2e2;
+  background-color: #00bcd4;
+  color: #000;
 }
+
+.pagination button:disabled {
+  border-color: #444;
+  color: #666;
+  cursor: not-allowed;
+  background-color: transparent;
+}
+
+/* 📦 무한스크롤 카드뷰 */
 .infinite-view .movies-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 20px;
 }
+
 .loading {
-  text-align: center;
-  margin: 20px 0;
+  margin-top: 20px;
   font-size: 1.2em;
-  color: white;
+  color: #aaa;
 }
 </style>

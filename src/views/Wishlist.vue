@@ -33,22 +33,47 @@ export default {
 
 <style scoped>
 .wishlist {
-  padding: 20px;
-  background-color: #23242a;
-  flex-direction: column;
+  padding: 40px 20px;
+  background-color: #1b1c1e;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
 .empty {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 20px 40px;
+  border-radius: 12px;
+  color: #ccc;
+  font-size: 1.1em;
   text-align: center;
-  font-size: 1.2em;
-  margin-top: 50px;
-  color: aliceblue;
-  flex: 1;
+  margin-top: 100px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
+
 .movies-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  flex: 1;
+  gap: 24px;
+  margin-top: 30px;
+  max-width: 1400px;
+  width: 100%;
+  padding: 0 10px;
+}
+
+/* 반응형 - 모바일에서는 간격 좁게 */
+@media (max-width: 768px) {
+  .movies-grid {
+    gap: 16px;
+  }
+
+  .empty {
+    font-size: 1em;
+    padding: 16px 24px;
+  }
 }
 </style>

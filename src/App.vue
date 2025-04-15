@@ -1,17 +1,16 @@
-<!-- src/App.vue -->
 <template>
   <div id="app">
     <Header />
-    <!-- Header 컴포넌트 포함 -->
-    <router-view />
+    <router-view class="main-view" />
     <Footer />
-    <!-- Footer 컴포넌트 포함 -->
   </div>
 </template>
 
 <script>
 import Header from "./components/common/Header.vue";
 import Footer from "./components/common/Footer.vue";
+import { useRoute } from "vue-router";
+import { computed } from "vue";
 
 export default {
   name: "App",
@@ -19,17 +18,36 @@ export default {
     Header,
     Footer,
   },
+  setup() {
+    const route = useRoute();
+    const hiddenPaths = ["/signin", "/signup"];
+    const showLayout = computed(() => !hiddenPaths.includes(route.path));
+    return { showLayout };
+  },
 };
 </script>
 
 <style lang="scss">
-#app {
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: #1e1e1e;
+  color: #fff;
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  overflow-x: hidden;
 }
 
-/* 기존에 있던 test-movie-card 스타일은 제거 */
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 </style>

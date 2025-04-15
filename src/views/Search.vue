@@ -118,31 +118,33 @@ export default {
 
 <style scoped>
 .search-page {
-  padding: 20px;
-  background-color: #23242a;
+  padding: 40px 20px;
+  background-color: #121212;
   color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .filter-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  margin-bottom: 30px;
 }
 
 .title {
-  font-size: 1.2em;
-  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
   text-align: center;
 }
 
 .filter-bar {
   display: flex;
-  gap: 15px;
+  gap: 16px;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
@@ -151,70 +153,77 @@ export default {
 .filter {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 5px;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.filter label {
+  font-size: 0.85rem;
+  color: #bbb;
 }
 
 .filter select {
-  padding: 10px;
-  border: 1px solid #fff;
-  background-color: #23242a;
+  padding: 10px 14px;
+  border: 1px solid #00cfff;
+  background-color: transparent;
   color: #fff;
-  border-radius: 4px;
+  border-radius: 20px;
   cursor: pointer;
-  font-size: 1em;
+  font-size: 0.95rem;
+  transition: all 0.3s;
+}
+
+.filter select:hover,
+.filter select:focus {
+  background-color: rgba(0, 207, 255, 0.1);
+  outline: none;
 }
 
 .reset-btn {
-  padding: 10px 25px;
-  border: 1px solid #fff;
-  background-color: #23242a;
-  color: #fff;
-  border-radius: 4px;
+  padding: 10px 22px;
+  border-radius: 20px;
+  background-color: transparent;
+  border: 1px solid #00cfff;
+  color: #00cfff;
+  font-weight: bold;
   cursor: pointer;
-  font-size: 1em;
+  transition: all 0.3s;
+}
+
+.reset-btn:hover {
+  background-color: #00cfff;
+  color: #000;
 }
 
 .movie-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 24px;
   justify-content: center;
   margin-top: 20px;
 }
 
-/* 반응형 스타일 */
+/* 반응형 */
 @media (max-width: 768px) {
   .filter-bar {
-    gap: 10px;
+    flex-direction: column;
+    gap: 12px;
   }
 
   .filter select,
   .reset-btn {
-    padding: 8px 15px;
-    font-size: 0.9em;
+    width: 100%;
+    font-size: 0.95rem;
   }
 }
 
-@media (max-width: 480px) {
-  .title {
-    font-size: 1em;
-  }
+select option {
+  background-color: #23242a;
+  color: white;
+}
 
-  .filter-header {
-    gap: 10px;
-  }
-
-  .filter-bar {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .filter select,
-  .reset-btn {
-    width: 100%; /* 필터 및 버튼이 화면 너비에 맞도록 설정 */
-    padding: 10px;
-    font-size: 1em;
-  }
+select option:hover {
+  background-color: #00cfff;
+  color: black;
 }
 </style>
