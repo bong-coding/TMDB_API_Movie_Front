@@ -1,4 +1,4 @@
-# 🎬 짭플렉스 (Jjapflex)
+# 🎬 영화데모 제작작
 
 > **Vue.js 기반 영화 정보 제공 SPA 웹 애플리케이션**  
 > The Movie Database(TMDb) 및 Kakao API를 활용하여 사용자 맞춤 영화 탐색, 위시리스트, 다국어 지원, 소셜 로그인 기능제공
