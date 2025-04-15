@@ -45,7 +45,10 @@
       >
         <div class="modal-content" @click.stop>
           <h2>알림</h2>
-          <p>돈주고 봐라 ㅗ</p>
+          <p>
+            돈주고 봐라 ㅗ<br />
+            유튜브 긁어올려다가 귀찮아서 포기
+          </p>
           <button @click="togglePlayModal()">닫기</button>
         </div>
       </div>
@@ -360,30 +363,38 @@ export default {
 }
 
 .modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 500px;
-  width: 80%;
-  color: black;
+  background: #1e1e1e;
+  color: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  font-family: "Segoe UI", sans-serif;
+  line-height: 1.6;
 }
 
 .modal-content h2 {
-  margin-bottom: 10px;
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+  font-weight: bold;
+  color: #ffffff;
 }
 
 .modal-content button {
-  margin-top: 15px;
-  padding: 8px 20px;
-  cursor: pointer;
+  margin-top: 16px;
+  padding: 10px 20px;
   border: none;
-  background-color: #4b4b4b;
-  color: white;
-  border-radius: 4px;
+  background-color: #45f3ff;
+  color: #000;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .modal-content button:hover {
-  background-color: #333;
+  background-color: #28c4d8;
 }
 
 /* 영화 섹션 스타일 */
