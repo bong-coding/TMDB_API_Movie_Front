@@ -30,7 +30,10 @@
       <!-- 우측: 로그인/로그아웃 -->
       <div class="right">
         <template v-if="isLoggedIn">
-          <span class="welcome">{{ user?.nickname }}님</span>
+          <span class="welcome">
+            <span class="nickname">{{ user?.nickname }}</span
+            >님
+          </span>
           <button @click="fetchProfile">정보</button>
           <button @click="logout">로그아웃</button>
         </template>
@@ -266,5 +269,25 @@ button:hover,
   object-fit: cover;
   border-radius: 50%;
   margin-top: 10px;
+}
+
+.nickname {
+  color: #45f3ff;
+  font-weight: bold;
+  font-size: 1.1em;
+  background: linear-gradient(90deg, #45f3ff, #1fa2ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 2s infinite ease-in-out;
+}
+
+@keyframes shine {
+  0%,
+  100% {
+    filter: brightness(1.1);
+  }
+  50% {
+    filter: brightness(1.6);
+  }
 }
 </style>
