@@ -19,6 +19,8 @@
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
     "@lhci/cli": "^0.14.0",
+    "@types/estree": "^1.0.8",
+    "@types/json-schema": "^7.0.15",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
